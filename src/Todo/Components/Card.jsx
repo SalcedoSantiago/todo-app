@@ -5,7 +5,6 @@ import { BiDotsHorizontalRounded } from 'react-icons/bi';
 
 const Card = ({ task = "", title = "" }) => {
 
-
     return (
         <Box
             px={3}
@@ -28,7 +27,7 @@ const Card = ({ task = "", title = "" }) => {
                 <Text>
                     <IconButton
                         aria-label="More server options"
-                        icon={<BiDotsHorizontalRounded />}
+                        icon={<BiDotsHorizontalRounded color='black' />}
                         colorScheme=''
                         w="fit-content"
                         h={'auto'}

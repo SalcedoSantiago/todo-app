@@ -10,36 +10,13 @@ import { Stack, Box, Heading, Text, IconButton } from '@chakra-ui/react'
  * Internal dependencies
  */
 import ListTodos from '../Components/List';
+import Modal from '../Components/Modal';
+import { useTodos } from '../hooks';
 
 const Body = () => {
+    const { todos } = useTodos();
 
-    const [todos, setTodos] = useState({
-        nextUp: {
-            title: 'Next Up',
-            items: {
-                432: {
-                    title: '👊',
-                    description: 'lorem ipsum'
-                },
-                435: {
-                    title: '🤟',
-                    description: 'lorem ipsum'
-                },
-                4351: {
-                    title: '🤟',
-                    description: 'lorem ipsum'
-                }
-            }
-        },
-        inProgress: {
-            title: 'In Progress',
-            items: {}
-        },
-        Complete: {
-            title: 'Complete',
-            items: {}
-        }
-    })
+    console.log('todos',todos);
 
 
     return (
@@ -62,6 +39,7 @@ const Body = () => {
                 )
                 }
             </Stack>
+            <Modal />
         </Box>
     )
 }

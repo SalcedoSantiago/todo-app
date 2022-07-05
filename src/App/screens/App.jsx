@@ -1,16 +1,24 @@
+/**
+ * External dependencies
+ */
 import React from 'react'
 import Layout from '../components/Layout'
-import { Stack, Box, Heading, Text, IconButton } from '@chakra-ui/react'
-import { BiDotsHorizontalRounded } from 'react-icons/bi';
+
+/**
+ * Internal dependencies
+ */
 import Body from '../../Todo/screens/Body';
+import { TodoProvider } from '../../Todo/context'
 
 
 const App = () => {
 
     return (
-        <Layout>
-            <Body />
-        </Layout>
+        <TodoProvider>
+            <Layout>
+                <Body />
+            </Layout>
+        </TodoProvider>
     )
 }
 
