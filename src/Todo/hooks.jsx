@@ -6,16 +6,22 @@ export function useTodos() {
 
     const {
         state: {
-            todos
+            todos,
+            isOpen,
         },
         actions: {
-            addTodo
+            addTodo,
+            toggleModal,
+            deleteTodo,
         }
     } = useContext(TodoContext);
 
 
     return {
         todos,
-        addTodo
+        addTodo,
+        isOpen,
+        toggleModal,
+        deleteTodo,
     }
 }

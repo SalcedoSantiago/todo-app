@@ -10,14 +10,13 @@ import { Stack, Box, Heading, Text, IconButton } from '@chakra-ui/react'
  * Internal dependencies
  */
 import ListTodos from '../Components/List';
-import Modal from '../Components/Modal';
+import Modal from '../Components/modal/Screens/Modal';
 import { useTodos } from '../hooks';
+import NewTodo from '../Components/modal/Screens/NewTodo';
 
 const Body = () => {
     const { todos } = useTodos();
-
-    console.log('todos',todos);
-
+    const [typeTodo, setTypeTodo] = useState('todo');
 
     return (
         <Box h={'100%'} py={4}>
@@ -33,13 +32,11 @@ const Body = () => {
                 h="70vh"
             >
                 {map(todos, (todo, index) =>
-                    <>
-                        <ListTodos key={index} todo={todo} taskId={index} />
-                    </>
+                    <ListTodos key={index} todo={todo} taskId={index} setTypeTodo={setTypeTodo} />
                 )
                 }
             </Stack>
-            <Modal />
+            <Modal type={typeTodo} />
         </Box>
     )
 }

@@ -3,15 +3,13 @@
  */
 import React from 'react';
 import { noop } from 'lodash';
-import { Stack, Box } from '@chakra-ui/react';
+import { Stack, Box, useDisclosure } from '@chakra-ui/react';
 
 
 const Add = (props) => {
     const {
         onClick = noop
     } = props;
-
-
 
 
     return (
@@ -29,7 +27,8 @@ const Add = (props) => {
             transition={'all 1 ease-out'}
             _hover={{ borderColor: 'gray.600', color: 'gray.600' }}
         >
-            <Box fontWeight={500}>
+            <Box fontWeight={500}
+            >
                 +
             </Box>
         </Stack>

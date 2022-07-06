@@ -1,9 +1,9 @@
 import React from 'react'
 import { Stack, Box, Heading, Text, IconButton } from '@chakra-ui/react'
 import { BiDotsHorizontalRounded } from 'react-icons/bi';
+import CardActions from './cardActions';
 
-
-const Card = ({ task = "", title = "" }) => {
+const Card = ({ todo, type }) => {
 
     return (
         <Box
@@ -12,9 +12,7 @@ const Card = ({ task = "", title = "" }) => {
             borderRadius={'md'}
             bgColor={''}
             cursor={'pointer'}
-            borderWidth={2}
-            borderColor={'gray.400'}
-            borderStyle="dashed"
+            shadow="sm"
 
         >
             <Stack pb={2} direction={'row'} justifyContent={'space-between'} alignItems="center">
@@ -22,21 +20,15 @@ const Card = ({ task = "", title = "" }) => {
                     px={2}
                     fontWeight={600}
                 >
-                    {title}
+                    {todo.title}
                 </Text>
                 <Text>
-                    <IconButton
-                        aria-label="More server options"
-                        icon={<BiDotsHorizontalRounded color='black' />}
-                        colorScheme=''
-                        w="fit-content"
-                        h={'auto'}
-                    />
+                    <CardActions todo={todo} type={type} />
                 </Text>
             </Stack>
             <Box px={2} >
                 <Text>
-                    {task}
+                    {todo.desc}
                 </Text>
             </Box>
         </Box>
