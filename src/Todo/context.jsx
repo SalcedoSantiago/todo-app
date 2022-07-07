@@ -1,61 +1,80 @@
-import { isEqual, uniqueId } from "lodash";
-import { createContext, useState } from "react";
+import { map, isEqual, uniqueId } from "lodash";
+import { createContext, useMemo, useState } from "react";
 
 const TodoContext = createContext({});
 
+const STATUS = [
+    {
+        name: 'todo',
+        order: 1
+    },
+    {
+        name: 'doing',
+        order: 2
+    },
+    {
+        name: 'done',
+        order: 3
+    }
+
+]
 
 const initialState = {
-    todo: {
-        type: 'todo',
-        order: 1,
-        title: 'Todo',
-        items: [
-            {
-                id: 1,
-                title: 'comer',
-                description: 'comer cada 4hs',
-                type: 'text',
-                initStatus: 'todo',
-                status: 'todo'
-            }
-        ]
+    1: {
+        title: 'Hacer deporte',
+        description: 'lorem ipsum',
+        status: 'todo',
+        labels: ['work'],
+        order: 0
     },
-    doing: {
-        type: 'doing',
-        order: 1,
-        title: 'Doing',
-        items: [
-            {
-                id: 213,
-                title: 'Dstudiar',
-                description: 'Estudiar por dos horas',
-                initStatus: 'doing',
-                type: 'text',
-                status: 'doing'
-            }
-        ]
+    2: {
+        title: 'Estudiar',
+        description: 'lorem ipsum',
+        status: 'doing',
+        labels: ['work'],
+        order: 0
     },
-    done: {
-        type: 'done',
-        order: 1,
-        title: 'Done',
-        items: [
-            {
-                id: 23,
-                title: 'Levantarse',
-                description: 'Levantarse a las 10 am',
-                type: 'text',
-                initStatus: 'done',
-                status: 'done'
-            }
-        ]
+    3: {
+        title: 'Comer',
+        description: 'lorem ipsum',
+        status: 'done',
+        labels: ['work'],
+        order: 1
+    },
+    4: {
+        title: 'Trabajar',
+        description: 'lorem ipsum',
+        status: 'done',
+        labels: ['work'],
+        order: 0
+    },
+    5: {
+        title: 'Dormir',
+        description: 'lorem ipsum',
+        status: 'done',
+        labels: ['work'],
+        order: 2
     }
 }
 
 
+
 function TodoProvider({ children }) {
     const [isOpen, toggleModal] = useState();
-    const [todos, setTodos] = useState(initialState)
+    const [todos, setTodos] = useState(initialState);
+    const [status, setStatus] = useState(STATUS);
+
+    const todoes = status.map(({ name, order }) => {
+        return {
+            type: name,
+            title: name,
+            order: order,
+            items: [...Object.values(todos).filter(({ status }) => status == name)].sort((a, b) => a.order - b.order)
+        }
+    }
+    )
+    
+    const allTodos = [...todoes.sort((a, b) => a.order - b.order)];
 
     const addTodo = (type = false, task) => {
         if (!type) {
@@ -127,6 +146,7 @@ function TodoProvider({ children }) {
         state: {
             todos,
             isOpen,
+            allTodos
         },
         actions: {
             addTodo,
@@ -135,6 +155,14 @@ function TodoProvider({ children }) {
             updateTodo
         }
     }
+
+
+    if (!Boolean(allTodos.length)) {
+        return <>
+            test
+        </>
+    }
+
 
     return (
         <TodoContext.Provider value={value}>

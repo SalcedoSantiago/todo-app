@@ -14,7 +14,7 @@ import Modal from '../Components/modal/Screens/Modal';
 import { useTodos } from '../hooks';
 
 const Body = () => {
-    const { todos, toggleModal } = useTodos();
+    const { todos, toggleModal, allTodos} = useTodos();
     const [typeTodo, setTypeTodo] = useState('todo');
 
     return (
@@ -45,7 +45,7 @@ const Body = () => {
                 gap={4}
                 h="70vh"
             >
-                {map(todos, (todo, index) =>
+                {map(allTodos, (todo, index) =>
                     <ListTodos key={index} todo={todo} taskId={index} setTypeTodo={setTypeTodo} />
                 )
                 }
