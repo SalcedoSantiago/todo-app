@@ -19,44 +19,48 @@ const STATUS = [
 
 ]
 
-const initialState = {
-    1: {
+const initialState = [
+    {
         title: 'Hacer deporte',
         description: 'lorem ipsum',
         status: 'todo',
         labels: ['work'],
-        order: 0
+        id: 543,
+        order: 0,
     },
-    2: {
+    {
         title: 'Estudiar',
         description: 'lorem ipsum',
         status: 'doing',
         labels: ['work'],
-        order: 0
+        id: 613,
+        order: 0,
     },
-    3: {
+    {
         title: 'Comer',
         description: 'lorem ipsum',
         status: 'done',
         labels: ['work'],
-        order: 1
+        id: 13,
+        order: 1,
     },
-    4: {
+    {
         title: 'Trabajar',
         description: 'lorem ipsum',
         status: 'done',
         labels: ['work'],
+        id: 1543,
         order: 0
     },
-    5: {
+    {
         title: 'Dormir',
         description: 'lorem ipsum',
         status: 'done',
         labels: ['work'],
+        id: 35,
         order: 2
     }
-}
-
+]
 
 
 function TodoProvider({ children }) {
@@ -69,34 +73,23 @@ function TodoProvider({ children }) {
             type: name,
             title: name,
             order: order,
-            items: [...Object.values(todos).filter(({ status }) => status == name)].sort((a, b) => a.order - b.order)
+            items: [...todos.filter(({ status }) => status == name)].sort((a, b) => a.order - b.order)
         }
     }
-    )
-    
-    const allTodos = [...todoes.sort((a, b) => a.order - b.order)];
+    );
 
-    const addTodo = (type = false, task) => {
-        if (!type) {
-            return;
-        }
+    const allTodos = useMemo(() => [...todoes.sort((a, b) => a.order - b.order)], todoes);
 
-        setTodos({
+    const addTodo = (todo) => {
+        const id = uniqueId();
+        setTodos([
             ...todos,
-            [type]: {
-                ...todos[type],
-                items: [
-                    ...todos[type].items,
-                    {
-                        ...task,
-                        initStatus: task.status,
-                        id: uniqueId()
-                    }
-                ]
+            {
+                ...todo,
+                id: uniqueId()
             }
-        })
+        ])
     }
-
 
     const deleteTodo = (type, todo) => {
         if (!type || !todo) {
@@ -113,32 +106,15 @@ function TodoProvider({ children }) {
     }
 
 
-    const updateTodo = (currentTodo, type) => {
-        if (!currentTodo || !currentTodo?.id || !type) {
-            return;
-        }
-
-        if (!todos[type] || !Boolean(todos[type].items.length)) {
-            return
-        }
-
-        const newTodo = todos[type].items.map((todo) => {
-            if (todo.id == currentTodo.id) {
-                return currentTodo;
+    const updateTodo = (currentTodo) => {
+        const newTodos = todos.map((todo) => {
+            if (todo.id === currentTodo.id) {
+                return currentTodo
             }
-
-            return todo;
+            return todo
         })
 
-        setTodos({
-            ...todos,
-            [type]: {
-                ...todos[type],
-                items: newTodo
-            }
-        })
-
-
+        setTodos(newTodos);
     }
 
 
@@ -146,7 +122,8 @@ function TodoProvider({ children }) {
         state: {
             todos,
             isOpen,
-            allTodos
+            allTodos,
+            status
         },
         actions: {
             addTodo,

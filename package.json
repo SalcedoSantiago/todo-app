@@ -13,6 +13,7 @@
     "@emotion/react": "^11.9.3",
     "@emotion/styled": "^11.9.3",
     "framer-motion": "^6.3.16",
+    "immer": "^9.0.15",
     "lodash": "^4.17.21",
     "react": "^18.0.0",
     "react-color": "^2.19.3",

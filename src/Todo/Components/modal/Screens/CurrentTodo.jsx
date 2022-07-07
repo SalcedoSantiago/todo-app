@@ -13,14 +13,12 @@ import { map } from 'lodash';
 import DueDate from '../components/DueDate';
 
 const CurrentTodo = ({ isOpen, toggleModal, currentTodo, setCurrentTodo }) => {
-    const { todos, updateTodo } = useTodos();
+    const { todos, updateTodo, status } = useTodos();
 
     useEffect(() => {
 
     }, [currentTodo])
 
-    console.log('currentTodo', currentTodo);
-    // console.log('todo', todo);
 
     const handleAddTitle = ({ target: { value } }) => {
         setCurrentTodo({ ...currentTodo, title: value });
@@ -35,7 +33,7 @@ const CurrentTodo = ({ isOpen, toggleModal, currentTodo, setCurrentTodo }) => {
     }
 
     const handleOnSave = () => {
-        updateTodo(currentTodo, currentTodo.initStatus);
+        updateTodo(currentTodo);
     }
 
     return (
@@ -46,8 +44,8 @@ const CurrentTodo = ({ isOpen, toggleModal, currentTodo, setCurrentTodo }) => {
                 <Stack direction={'row'} alignItems={'center'}>
                     <Text>Status</Text>
                     <Select value={currentTodo.status} onChange={handleChangeStatus}>
-                        {map(todos, (todo, index) =>
-                            <option key={index} value={todo.type}>{todo.type}</option>
+                        {map(status, ({ name }, index) =>
+                            <option key={name} value={name}>{name}</option>
                         )}
                     </Select>
                 </Stack>

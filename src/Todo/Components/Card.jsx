@@ -4,11 +4,10 @@ import CardActions from './cardActions';
 import { useTodos } from '../hooks';
 import ModalCurrent from '../Components/modal/Screens/CurrentTodo';
 
-const Card = ({ todo, type }) => {
+const Card = ({ todo, type, id }) => {
     const [openModal, setOpenModal] = useState(false)
     // const { toggleModal } = useTodos();
     const [currentTodo, setCurrentTodo] = useState({});
-
 
     return (
         <Box

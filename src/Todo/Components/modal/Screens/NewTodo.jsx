@@ -14,14 +14,15 @@ import { map } from 'lodash';
 const NewTodo = ({ type }) => {
     const [desc, setDesc] = useState('');
     const [title, setTitle] = useState('');
-    const { todos, addTodo, toggleModal, isOpen } = useTodos();
-    const [typeSelected, setTypeSelected] = useState(type || 'todo');
+    const { todos, addTodo, toggleModal, isOpen, status } = useTodos();
+    const [typeSelected, setTypeSelected] = useState('todo');
 
     const handleAddTodo = () => {
-        addTodo(typeSelected, {
+        addTodo({
             description: desc,
             title: title,
-            status: typeSelected ? typeSelected : 'todo'
+            status: typeSelected,
+            order: 4
         });
         setDesc('');
         setTitle('');
@@ -44,8 +45,8 @@ const NewTodo = ({ type }) => {
                 <Stack direction={'row'} alignItems={'center'}>
                     <Text>Status</Text>
                     <Select value={typeSelected} onChange={({ target: { value } }) => { setTypeSelected(value) }}>
-                        {map(todos, (todo, index) =>
-                            <option key={index} value={todo.type}>{todo.type}</option>
+                        {map(status, ({ name }, index) =>
+                            <option key={name} value={name}>{name}</option>
                         )}
                     </Select>
                 </Stack>

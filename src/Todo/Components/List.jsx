@@ -27,6 +27,7 @@ const ListTodos = ({ todo, setTypeTodo }) => {
                             <CardTodo
                                 key={index}
                                 todo={todo}
+                                id={index}
                                 type={type}
                             />
                         )

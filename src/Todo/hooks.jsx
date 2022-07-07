@@ -9,6 +9,7 @@ export function useTodos() {
             todos,
             isOpen,
             allTodos,
+            status
         },
         actions: {
             addTodo,
@@ -23,6 +24,7 @@ export function useTodos() {
         todos,
         addTodo,
         allTodos,
+        status,
         isOpen,
         toggleModal,
         deleteTodo,
