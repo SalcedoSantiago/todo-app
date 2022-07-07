@@ -10,7 +10,7 @@ import { useTodos } from '../hooks';
 import AddTodo from './Add';
 import CardTodo from './Card';
 import HeaderList from './HeaderList';
-import Modal from '../Components/Modal';
+// import Modal from '../Components/Modal';
 
 const ListTodos = ({ todo, setTypeTodo }) => {
     const { toggleModal, isOpen } = useTodos();
@@ -21,7 +21,7 @@ const ListTodos = ({ todo, setTypeTodo }) => {
         <Box width={'250px'} height={'100%'} >
             <Stack direction={'column'} gap={4} h={'100%'} py={4}>
                 <HeaderList title={title} />
-                <Stack direction={'column'} h={'100%'} maxH={'100%'} overflowY="scroll">
+                <Stack direction={'column'} h={'100%'} >
                     {items.map((todo, index) => {
                         return (
                             <CardTodo
@@ -34,10 +34,10 @@ const ListTodos = ({ todo, setTypeTodo }) => {
                     )}
                 </Stack>
             </Stack>
-            <AddTodo onClick={() => {
+            {/* <AddTodo onClick={() => {
                 setTypeTodo(type)
                 toggleModal(true)
-            }} />
+            }} /> */}
         </Box>
     )
 }

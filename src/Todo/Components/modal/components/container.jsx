@@ -4,37 +4,33 @@ import {
     ModalOverlay,
     ModalContent,
     ModalBody,
-    ModalHeader,
     ModalFooter,
     Button,
-    ModalCloseButton,
-    Input,
-    Flex,
-    Box,
-    Stack,
-    Text,
-    Badge,
-    Textarea
 } from '@chakra-ui/react';
 
 /**
  * Internal dependencies
  */
 import { useTodos } from '../../../hooks';
+import { noop } from 'lodash';
 
-const ModalContainer = ({ onSave, children }) => {
-    const { isOpen, toggleModal } = useTodos();
-    const finalRef = useRef(null)
+const ModalContainer = ({ onSave = noop, children, isOpen, toggleModal, onCancel = noop }) => {
+
+
+    const handleCancel = () => {
+        onCancel();
+        toggleModal(false);
+    }
 
     return (
-        <Modal finalFocusRef={finalRef} isCentered isOpen={isOpen} onClose={() => { toggleModal(false) }}>
+        <Modal size={'xl'} isCentered isOpen={isOpen} onClose={() => { toggleModal(false) }}>
             <ModalOverlay />
             <ModalContent>
-                <ModalBody>
+                <ModalBody py={10} px={6}>
                     {children}
                 </ModalBody>
                 <ModalFooter>
-                    <Button colorScheme='blue' mr={3} onClick={() => { toggleModal(false) }}>
+                    <Button colorScheme='blue' mr={3} onClick={handleCancel}>
                         Close
                     </Button>
                     <Button colorScheme={'green'} onClick={onSave}>

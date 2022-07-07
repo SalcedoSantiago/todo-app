@@ -1,9 +1,14 @@
-import React from 'react'
-import { Stack, Box, Heading, Text, IconButton } from '@chakra-ui/react'
-import { BiDotsHorizontalRounded } from 'react-icons/bi';
+import React, { useState } from 'react'
+import { Stack, Box, Text } from '@chakra-ui/react'
 import CardActions from './cardActions';
+import { useTodos } from '../hooks';
+import ModalCurrent from '../Components/modal/Screens/CurrentTodo';
 
 const Card = ({ todo, type }) => {
+    const [openModal, setOpenModal] = useState(false)
+    // const { toggleModal } = useTodos();
+    const [currentTodo, setCurrentTodo] = useState({});
+
 
     return (
         <Box
@@ -13,7 +18,13 @@ const Card = ({ todo, type }) => {
             bgColor={''}
             cursor={'pointer'}
             shadow="sm"
-
+            onClick={() => {
+                // if (currentTodo?.id == todo.id) {
+                //     return
+                // }
+                setCurrentTodo(todo);
+                setOpenModal(true)
+            }}
         >
             <Stack pb={2} direction={'row'} justifyContent={'space-between'} alignItems="center">
                 <Text
@@ -22,15 +33,18 @@ const Card = ({ todo, type }) => {
                 >
                     {todo.title}
                 </Text>
-                <Text>
+                <Box>
                     <CardActions todo={todo} type={type} />
-                </Text>
+                </Box>
             </Stack>
             <Box px={2} >
                 <Text>
-                    {todo.desc}
+                    {todo.description}
                 </Text>
             </Box>
+            {/* <Modal type={typeTodo} /> */}
+
+            <ModalCurrent isOpen={openModal} toggleModal={setOpenModal} currentTodo={currentTodo} setCurrentTodo={setCurrentTodo} />
         </Box>
     )
 }

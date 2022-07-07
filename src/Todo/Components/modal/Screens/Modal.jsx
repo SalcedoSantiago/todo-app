@@ -8,7 +8,6 @@ const Modal = (props) => {
         <CurrentTodo />
     }
 
-    console.log('test');
     return (
         <NewTodo {...props} />
     )

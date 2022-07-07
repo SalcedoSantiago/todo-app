@@ -14,8 +14,8 @@ import { map } from 'lodash';
 const NewTodo = ({ type }) => {
     const [desc, setDesc] = useState('');
     const [title, setTitle] = useState('');
-    const { todos, addTodo, toggleModal } = useTodos();
-    const [typeSelected, setTypeSelected] = useState(type);
+    const { todos, addTodo, toggleModal, isOpen } = useTodos();
+    const [typeSelected, setTypeSelected] = useState(type || 'todo');
 
     const handleAddTodo = () => {
         addTodo(typeSelected, {
@@ -23,6 +23,9 @@ const NewTodo = ({ type }) => {
             title: title,
             status: typeSelected ? typeSelected : 'todo'
         });
+        setDesc('');
+        setTitle('');
+        setTypeSelected('todo')
         toggleModal(false)
     }
 
@@ -35,7 +38,7 @@ const NewTodo = ({ type }) => {
     }
 
     return (
-        <ModalContainer onSave={() => { handleAddTodo() }}>
+        <ModalContainer toggleModal={toggleModal} isOpen={isOpen} onSave={() => { handleAddTodo() }}>
             <Input value={title} onInput={handleAddTitle} />
             <Box>
                 <Stack direction={'row'} alignItems={'center'}>

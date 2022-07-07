@@ -13,6 +13,7 @@ export function useTodos() {
             addTodo,
             toggleModal,
             deleteTodo,
+            updateTodo,
         }
     } = useContext(TodoContext);
 
@@ -23,5 +24,6 @@ export function useTodos() {
         isOpen,
         toggleModal,
         deleteTodo,
+        updateTodo
     }
 }

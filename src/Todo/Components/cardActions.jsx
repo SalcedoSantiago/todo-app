@@ -11,7 +11,7 @@ import {
 } from '@chakra-ui/react';
 
 import { BsThreeDotsVertical, BsChatSquareQuote, BsFillTrashFill } from 'react-icons/bs';
-import { RiShutDownLine, RiFileShredLine } from 'react-icons/ri';
+import { RiFileShredLine } from 'react-icons/ri';
 import { useTodos } from '../hooks';
 
 const CardActions = ({ todo, type }) => {

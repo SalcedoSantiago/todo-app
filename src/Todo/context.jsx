@@ -1,4 +1,4 @@
-import { isEqual } from "lodash";
+import { isEqual, uniqueId } from "lodash";
 import { createContext, useState } from "react";
 
 const TodoContext = createContext({});
@@ -11,9 +11,11 @@ const initialState = {
         title: 'Todo',
         items: [
             {
+                id: 1,
                 title: 'comer',
-                text: 'comer cada 4hs',
+                description: 'comer cada 4hs',
                 type: 'text',
+                initStatus: 'todo',
                 status: 'todo'
             }
         ]
@@ -24,8 +26,10 @@ const initialState = {
         title: 'Doing',
         items: [
             {
+                id: 213,
                 title: 'Dstudiar',
-                text: 'Estudiar por dos horas',
+                description: 'Estudiar por dos horas',
+                initStatus: 'doing',
                 type: 'text',
                 status: 'doing'
             }
@@ -37,9 +41,11 @@ const initialState = {
         title: 'Done',
         items: [
             {
+                id: 23,
                 title: 'Levantarse',
-                text: 'Levantarse a las 10 am',
+                description: 'Levantarse a las 10 am',
                 type: 'text',
+                initStatus: 'done',
                 status: 'done'
             }
         ]
@@ -49,7 +55,6 @@ const initialState = {
 
 function TodoProvider({ children }) {
     const [isOpen, toggleModal] = useState();
-
     const [todos, setTodos] = useState(initialState)
 
     const addTodo = (type = false, task) => {
@@ -63,7 +68,11 @@ function TodoProvider({ children }) {
                 ...todos[type],
                 items: [
                     ...todos[type].items,
-                    task
+                    {
+                        ...task,
+                        initStatus: task.status,
+                        id: uniqueId()
+                    }
                 ]
             }
         })
@@ -71,15 +80,10 @@ function TodoProvider({ children }) {
 
 
     const deleteTodo = (type, todo) => {
-
         if (!type || !todo) {
             return;
         }
-        console.log(' todos[type]', todos[type]);
-        console.log('todo', todo);
-
         const currentTodo = todos[type].items.filter((curr) => !isEqual(curr, todo));
-
         setTodos({
             ...todos,
             [type]: {
@@ -87,18 +91,48 @@ function TodoProvider({ children }) {
                 items: currentTodo
             }
         })
+    }
+
+
+    const updateTodo = (currentTodo, type) => {
+        if (!currentTodo || !currentTodo?.id || !type) {
+            return;
+        }
+
+        if (!todos[type] || !Boolean(todos[type].items.length)) {
+            return
+        }
+
+        const newTodo = todos[type].items.map((todo) => {
+            if (todo.id == currentTodo.id) {
+                return currentTodo;
+            }
+
+            return todo;
+        })
+
+        setTodos({
+            ...todos,
+            [type]: {
+                ...todos[type],
+                items: newTodo
+            }
+        })
+
 
     }
+
 
     const value = {
         state: {
             todos,
-            isOpen
+            isOpen,
         },
         actions: {
             addTodo,
             toggleModal,
-            deleteTodo
+            deleteTodo,
+            updateTodo
         }
     }
 
