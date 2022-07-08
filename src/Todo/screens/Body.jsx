@@ -10,11 +10,11 @@ import { Stack, Box, Heading, Text, Button, Container } from '@chakra-ui/react'
  * Internal dependencies
  */
 import ListTodos from '../Components/List';
-import Modal from '../Components/modal/Screens/Modal';
 import { useTodos } from '../hooks';
+import NewTodo from '../Components/modal/Screens/NewTodo';
 
 const Body = () => {
-    const { todos, toggleModal, allTodos} = useTodos();
+    const { todos, toggleModal, allTodos } = useTodos();
     const [typeTodo, setTypeTodo] = useState('todo');
 
     return (
@@ -50,7 +50,7 @@ const Body = () => {
                 )
                 }
             </Stack>
-            <Modal type={typeTodo} />
+            <NewTodo type={typeTodo} />
         </Box>
     )
 }

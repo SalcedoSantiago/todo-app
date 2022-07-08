@@ -2,7 +2,8 @@
  * External dependencies
  */
 import React, { useState, useEffect } from 'react'
-import { Box, Text, Spinner, Textarea, Stack, Badge, Input, Select } from '@chakra-ui/react';
+import { Box, Text, Spinner, Textarea, Stack, Badge, Input, Select, Button } from '@chakra-ui/react';
+import { CirclePicker } from "react-color";
 
 /**
  * Internal dependencies
@@ -14,6 +15,7 @@ import DueDate from '../components/DueDate';
 
 const CurrentTodo = ({ isOpen, toggleModal, currentTodo, setCurrentTodo }) => {
     const { todos, updateTodo, status } = useTodos();
+    // const [blockPickerColor, setBlockPickerColor] = useState(currentTodo?.color ? currentTodo.color : "#37d67a");
 
     useEffect(() => {
 
@@ -34,11 +36,16 @@ const CurrentTodo = ({ isOpen, toggleModal, currentTodo, setCurrentTodo }) => {
 
     const handleOnSave = () => {
         updateTodo(currentTodo);
+        toggleModal(false)
+    }
+
+    const handleCancel = () => {
+        setCurrentTodo({});
+        toggleModal(false)
     }
 
     return (
-        <ModalContainer toggleModal={toggleModal} isOpen={isOpen} onSave={handleOnSave}>
-
+        <ModalContainer toggleModal={toggleModal} isOpen={isOpen} onSave={handleOnSave}  >
             <Input variant='unstyled' value={currentTodo.title} onInput={handleAddTitle} />
             <Box>
                 <Stack direction={'row'} alignItems={'center'}>
@@ -53,7 +60,6 @@ const CurrentTodo = ({ isOpen, toggleModal, currentTodo, setCurrentTodo }) => {
                 <DueDate
                     date={currentTodo.date}
                 />
-
                 <Box>
                     <Text>To do</Text>
                     <Textarea
@@ -63,8 +69,25 @@ const CurrentTodo = ({ isOpen, toggleModal, currentTodo, setCurrentTodo }) => {
                         size='sm'
                     />
                 </Box>
+                <CirclePicker
+                    color={currentTodo.color}
+                    colors={
+                        ["#fff", "#03a9f4", "#009688", "#ffeb3b", "#ff9800", "#795548", "#607d8b"]
+                    }
+                    onChange={(color) => {
+                        setCurrentTodo({ ...currentTodo, color: color.hex });
+                    }}
+                />
             </Box>
-        </ModalContainer>
+            <Stack direction="row" justifyContent={'end'}>
+                <Button colorScheme='blue' mr={3} onClick={handleCancel}>
+                    Close
+                </Button>
+                <Button colorScheme={'green'} onClick={handleOnSave}>
+                    Save
+                </Button>
+            </Stack>
+        </ModalContainer >
     )
 }
 

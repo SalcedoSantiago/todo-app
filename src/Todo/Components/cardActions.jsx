@@ -8,21 +8,38 @@ import {
     Button,
     Stack,
     Flex,
+    useDisclosure
 } from '@chakra-ui/react';
 
 import { BsThreeDotsVertical, BsChatSquareQuote, BsFillTrashFill } from 'react-icons/bs';
 import { RiFileShredLine } from 'react-icons/ri';
 import { useTodos } from '../hooks';
 
-const CardActions = ({ todo, type }) => {
-    const { deleteTodo } = useTodos();
+const CardActions = ({ forwardRef, todo, setCurrentTodo, setOpenModal }) => {
+    const { isOpen, onToggle, onClose } = useDisclosure();
+    const { deleteTodo, addTodo } = useTodos();
 
     const handleDelete = () => {
-        deleteTodo(type, todo)
+        deleteTodo(todo);
+        onClose(!isOpen)
+    }
+
+    const handleEdit = (e) => {
+        e.preventDefault();
+        setCurrentTodo(todo);
+        setOpenModal(true);
+        onClose(!isOpen)
+    }
+
+
+    const handleDuplicate = (e) => {
+        e.preventDefault();
+        addTodo(todo);
+        onClose(!isOpen)
     }
 
     return (
-        <Flex justifyContent="center" mt={4}>
+        <Flex justifyContent="center" ref={forwardRef}>
             <Popover placement="bottom" isLazy>
                 <PopoverTrigger>
                     <IconButton
@@ -42,8 +59,10 @@ const CardActions = ({ todo, type }) => {
                                 rightIcon={<BsChatSquareQuote />}
                                 justifyContent="space-between"
                                 fontWeight="normal"
-                                fontSize="sm">
-                                Request Access
+                                fontSize="sm"
+                                onClick={handleEdit}
+                            >
+                                Edit
                             </Button>
                             <Button
                                 w="194px"
@@ -51,8 +70,10 @@ const CardActions = ({ todo, type }) => {
                                 rightIcon={<RiFileShredLine />}
                                 justifyContent="space-between"
                                 fontWeight="normal"
-                                fontSize="sm">
-                                Purge Redis Cache
+                                fontSize="sm"
+                                onClick={handleDuplicate}
+                            >
+                                Duplicate
                             </Button>
                             <Button
                                 w="194px"

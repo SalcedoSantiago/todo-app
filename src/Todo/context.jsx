@@ -25,7 +25,8 @@ const initialState = [
         description: 'lorem ipsum',
         status: 'todo',
         labels: ['work'],
-        id: 543,
+        color: '#fff',
+        id: "543",
         order: 0,
     },
     {
@@ -33,7 +34,8 @@ const initialState = [
         description: 'lorem ipsum',
         status: 'doing',
         labels: ['work'],
-        id: 613,
+        color: '#fff',
+        id: "613",
         order: 0,
     },
     {
@@ -41,7 +43,8 @@ const initialState = [
         description: 'lorem ipsum',
         status: 'done',
         labels: ['work'],
-        id: 13,
+        color: '#fff',
+        id: "13",
         order: 1,
     },
     {
@@ -49,7 +52,8 @@ const initialState = [
         description: 'lorem ipsum',
         status: 'done',
         labels: ['work'],
-        id: 1543,
+        color: '#fff',
+        id: "1543",
         order: 0
     },
     {
@@ -57,7 +61,8 @@ const initialState = [
         description: 'lorem ipsum',
         status: 'done',
         labels: ['work'],
-        id: 35,
+        color: '#fff',
+        id: "35",
         order: 2
     }
 ]
@@ -91,21 +96,6 @@ function TodoProvider({ children }) {
         ])
     }
 
-    const deleteTodo = (type, todo) => {
-        if (!type || !todo) {
-            return;
-        }
-        const currentTodo = todos[type].items.filter((curr) => !isEqual(curr, todo));
-        setTodos({
-            ...todos,
-            [type]: {
-                ...todos[type],
-                items: currentTodo
-            }
-        })
-    }
-
-
     const updateTodo = (currentTodo) => {
         const newTodos = todos.map((todo) => {
             if (todo.id === currentTodo.id) {
@@ -115,6 +105,26 @@ function TodoProvider({ children }) {
         })
 
         setTodos(newTodos);
+    }
+
+
+    const reOrderTodos = (currentTodo) => {
+        const newTodos = todos.map((todo) => {
+            const current = currentTodo.filter((cur) => cur.id == todo.id)[0]
+            if (!!current) {
+                return current;
+            }
+            return todo;
+        })
+        setTodos(newTodos)
+    }
+
+    const deleteTodo = (_todo) => {
+        if (!_todo) {
+            return;
+        }
+        const newTodos = todos.filter((todo) => todo?.id != _todo?.id)
+        setTodos(newTodos)
     }
 
 
@@ -129,7 +139,8 @@ function TodoProvider({ children }) {
             addTodo,
             toggleModal,
             deleteTodo,
-            updateTodo
+            updateTodo,
+            reOrderTodos
         }
     }
 

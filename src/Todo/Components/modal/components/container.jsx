@@ -29,14 +29,6 @@ const ModalContainer = ({ onSave = noop, children, isOpen, toggleModal, onCancel
                 <ModalBody py={10} px={6}>
                     {children}
                 </ModalBody>
-                <ModalFooter>
-                    <Button colorScheme='blue' mr={3} onClick={handleCancel}>
-                        Close
-                    </Button>
-                    <Button colorScheme={'green'} onClick={onSave}>
-                        Save
-                    </Button>
-                </ModalFooter>
             </ModalContent>
         </Modal>
     )

@@ -2,8 +2,8 @@
  * External dependencies
  */
 import React, { useState } from 'react'
-import { Box, Text, Heading, Textarea, Stack, Badge, Input, Select } from '@chakra-ui/react';
-
+import { Box, Text, Heading, Textarea, Stack, Badge, Input, Select, Button } from '@chakra-ui/react';
+import { CirclePicker } from "react-color";
 /**
  * Internal dependencies
  */
@@ -16,6 +16,9 @@ const NewTodo = ({ type }) => {
     const [title, setTitle] = useState('');
     const { todos, addTodo, toggleModal, isOpen, status } = useTodos();
     const [typeSelected, setTypeSelected] = useState('todo');
+    const [blockPickerColor, setBlockPickerColor] = useState("#37d67a");
+
+
 
     const handleAddTodo = () => {
         addTodo({
@@ -38,8 +41,15 @@ const NewTodo = ({ type }) => {
         setTitle(value);
     }
 
+    const handleCancel = () => {
+        setDesc('');
+        setTitle('');
+        setTypeSelected('todo')
+        toggleModal(false)
+    }
+
     return (
-        <ModalContainer toggleModal={toggleModal} isOpen={isOpen} onSave={() => { handleAddTodo() }}>
+        <ModalContainer toggleModal={toggleModal} isOpen={isOpen}>
             <Input value={title} onInput={handleAddTitle} />
             <Box>
                 <Stack direction={'row'} alignItems={'center'}>
@@ -70,6 +80,23 @@ const NewTodo = ({ type }) => {
                     />
                 </Box>
             </Box>
+            <CirclePicker
+                color={blockPickerColor}
+                colors={
+                    ["#03a9f4", "#009688", "#ffeb3b", "#ff9800", "#795548", "#607d8b"]
+                }
+                onChange={(color) => {
+                    setBlockPickerColor(color.hex);
+                }}
+            />
+            <Stack direction="row" justifyContent={'end'} py={4}>
+                <Button colorScheme='blue' mr={3} onClick={handleCancel}>
+                    Close
+                </Button>
+                <Button colorScheme={'green'} onClick={handleAddTodo}>
+                    Save
+                </Button>
+            </Stack>
         </ModalContainer>
     )
 }

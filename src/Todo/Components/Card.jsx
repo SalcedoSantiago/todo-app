@@ -1,26 +1,30 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { Stack, Box, Text } from '@chakra-ui/react'
 import CardActions from './cardActions';
 import { useTodos } from '../hooks';
 import ModalCurrent from '../Components/modal/Screens/CurrentTodo';
 
-const Card = ({ todo, type, id }) => {
+const Card = ({ todo }) => {
     const [openModal, setOpenModal] = useState(false)
     // const { toggleModal } = useTodos();
     const [currentTodo, setCurrentTodo] = useState({});
+    const optionRef = useRef();
 
     return (
         <Box
+            position="relative"
             px={3}
             py={4}
+            mb={4}
             borderRadius={'md'}
-            bgColor={''}
             cursor={'pointer'}
             shadow="sm"
-            onClick={() => {
-                // if (currentTodo?.id == todo.id) {
-                //     return
-                // }
+            bgColor={todo?.color ? todo.color : 'white'}
+            color={todo?.color && todo.color == '#fff' ? '#000' : '#fff' || '#000'}
+            onClick={(e) => {
+                if (optionRef.current.contains(e.target)) {
+                    return;
+                }
                 setCurrentTodo(todo);
                 setOpenModal(true)
             }}
@@ -33,7 +37,12 @@ const Card = ({ todo, type, id }) => {
                     {todo.title}
                 </Text>
                 <Box>
-                    <CardActions todo={todo} type={type} />
+                    <CardActions
+                        forwardRef={optionRef}
+                        todo={todo}
+                        setCurrentTodo={setCurrentTodo}
+                        setOpenModal={setOpenModal}
+                    />
                 </Box>
             </Stack>
             <Box px={2} >
