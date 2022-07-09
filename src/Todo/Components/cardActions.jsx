@@ -39,7 +39,7 @@ const CardActions = ({ forwardRef, todo, setCurrentTodo, setOpenModal }) => {
     }
 
     return (
-        <Flex justifyContent="center" ref={forwardRef}>
+        <Flex justifyContent="center" ref={forwardRef} color="black">
             <Popover placement="bottom" isLazy>
                 <PopoverTrigger>
                     <IconButton

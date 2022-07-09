@@ -16,8 +16,7 @@ const NewTodo = ({ type }) => {
     const [title, setTitle] = useState('');
     const { todos, addTodo, toggleModal, isOpen, status } = useTodos();
     const [typeSelected, setTypeSelected] = useState('todo');
-    const [blockPickerColor, setBlockPickerColor] = useState("#37d67a");
-
+    const [blockPickerColor, setBlockPickerColor] = useState("#fff");
 
 
     const handleAddTodo = () => {
@@ -25,12 +24,14 @@ const NewTodo = ({ type }) => {
             description: desc,
             title: title,
             status: typeSelected,
+            color: blockPickerColor,
             order: 4
         });
         setDesc('');
         setTitle('');
-        setTypeSelected('todo')
-        toggleModal(false)
+        setBlockPickerColor('#fff');
+        setTypeSelected('todo');
+        toggleModal(false);
     }
 
     const handleAddDesc = ({ target: { value } }) => {
@@ -83,7 +84,7 @@ const NewTodo = ({ type }) => {
             <CirclePicker
                 color={blockPickerColor}
                 colors={
-                    ["#03a9f4", "#009688", "#ffeb3b", "#ff9800", "#795548", "#607d8b"]
+                    ["#fff", "#03a9f4", "#009688", "#ffeb3b", "#ff9800", "#795548", "#607d8b"]
                 }
                 onChange={(color) => {
                     setBlockPickerColor(color.hex);

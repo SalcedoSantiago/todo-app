@@ -4,7 +4,7 @@
 
 import { useState } from 'react';
 import { map } from 'lodash';
-import { Stack, Box, Heading, Text, Button, Container } from '@chakra-ui/react'
+import { Stack, Box, Heading, Text, Button, Container, Grid, GridItem } from '@chakra-ui/react'
 
 /**
  * Internal dependencies
@@ -12,9 +12,10 @@ import { Stack, Box, Heading, Text, Button, Container } from '@chakra-ui/react'
 import ListTodos from '../Components/List';
 import { useTodos } from '../hooks';
 import NewTodo from '../Components/modal/Screens/NewTodo';
+import Card from '../Components/Card';
 
 const Body = () => {
-    const { todos, toggleModal, allTodos } = useTodos();
+    const { todos, toggleModal, allTodos, status } = useTodos();
     const [typeTodo, setTypeTodo] = useState('todo');
 
     return (
@@ -45,8 +46,26 @@ const Body = () => {
                 gap={4}
                 h="70vh"
             >
+                {/* <Grid
+                    templateColumns={`150px, 1fr`}
+                    templateAreas={"'0 1 2'"}
+                    gap={4}
+                >
+                    {todos.map((todo) =>
+                        <GridItem
+                            key={todo.id}
+                            gridArea={status.filter((statues) => statues.name == todo.status)[0].order - 1}
+                            data-test={status.filter((statues) => statues.name == todo.status)[0].order - 1}
+                        >
+                            <Card
+                                todo={todo}
+                            />
+                        </GridItem>
+                    )}
+
+                </Grid> */}
                 {map(allTodos, (todo, index) =>
-                    <ListTodos key={index} todo={todo} taskId={index} setTypeTodo={setTypeTodo} />
+                    <ListTodos key={index} todo={todo} />
                 )
                 }
             </Stack>

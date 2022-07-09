@@ -112,7 +112,7 @@ function TodoProvider({ children }) {
         const newTodos = todos.map((todo) => {
             const current = currentTodo.filter((cur) => cur.id == todo.id)[0]
             if (!!current) {
-                return current;
+                return current
             }
             return todo;
         })

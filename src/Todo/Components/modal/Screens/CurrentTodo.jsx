@@ -1,9 +1,11 @@
 /**
  * External dependencies
  */
-import React, { useState, useEffect } from 'react'
+import React, { useRef, useEffect } from 'react'
 import { Box, Text, Spinner, Textarea, Stack, Badge, Input, Select, Button } from '@chakra-ui/react';
 import { CirclePicker } from "react-color";
+import data from '@emoji-mart/data'
+import { Picker } from 'emoji-mart'
 
 /**
  * Internal dependencies
@@ -15,11 +17,16 @@ import DueDate from '../components/DueDate';
 
 const CurrentTodo = ({ isOpen, toggleModal, currentTodo, setCurrentTodo }) => {
     const { todos, updateTodo, status } = useTodos();
-    // const [blockPickerColor, setBlockPickerColor] = useState(currentTodo?.color ? currentTodo.color : "#37d67a");
+    const ref = useRef()
 
     useEffect(() => {
 
     }, [currentTodo])
+
+
+    useEffect(() => {
+        new Picker({  data, ref })
+    }, [])
 
 
     const handleAddTitle = ({ target: { value } }) => {
@@ -56,6 +63,7 @@ const CurrentTodo = ({ isOpen, toggleModal, currentTodo, setCurrentTodo }) => {
                         )}
                     </Select>
                 </Stack>
+                {/* <div ref={ref} /> */}
 
                 <DueDate
                     date={currentTodo.date}

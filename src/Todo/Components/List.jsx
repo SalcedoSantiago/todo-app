@@ -16,12 +16,9 @@ import CardTodo from './Card';
 import HeaderList from './HeaderList';
 // import Modal from '../Components/Modal';
 
-const ListTodos = ({ todo, setTypeTodo }) => {
-    const { toggleModal, isOpen, reOrderTodos } = useTodos();
+const ListTodos = ({ todo }) => {
+    const { reOrderTodos } = useTodos();
     const { title, items, type } = todo;
-
-
-
 
 
     return (
@@ -42,15 +39,19 @@ const ListTodos = ({ todo, setTypeTodo }) => {
                         list={items}
                         //  setList={()=>{setState}
                         setList={(newState) => {
+                            // console.log('newState', newState);
                             const newOrder = newState.map((todo, index) => {
                                 return {
                                     ...todo,
-                                    order: index
+                                    order: index,
+                                    status: type,
                                 }
                             }
                             )
-                            reOrderTodos(newOrder)
+                            console.log('newOrder',newOrder);
+                            reOrderTodos(newOrder, todo)
                         }}
+                        group="shared-group-name"
                     >
                         {items.map((item) => (
                             <CardTodo

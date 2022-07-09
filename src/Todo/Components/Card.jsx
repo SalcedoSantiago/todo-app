@@ -1,12 +1,10 @@
 import React, { useRef, useState } from 'react'
 import { Stack, Box, Text } from '@chakra-ui/react'
 import CardActions from './cardActions';
-import { useTodos } from '../hooks';
 import ModalCurrent from '../Components/modal/Screens/CurrentTodo';
 
 const Card = ({ todo }) => {
     const [openModal, setOpenModal] = useState(false)
-    // const { toggleModal } = useTodos();
     const [currentTodo, setCurrentTodo] = useState({});
     const optionRef = useRef();
 
@@ -50,8 +48,6 @@ const Card = ({ todo }) => {
                     {todo.description}
                 </Text>
             </Box>
-            {/* <Modal type={typeTodo} /> */}
-
             <ModalCurrent isOpen={openModal} toggleModal={setOpenModal} currentTodo={currentTodo} setCurrentTodo={setCurrentTodo} />
         </Box>
     )
