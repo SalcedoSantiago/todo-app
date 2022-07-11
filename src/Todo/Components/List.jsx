@@ -48,7 +48,6 @@ const ListTodos = ({ todo }) => {
                                 }
                             }
                             )
-                            console.log('newOrder',newOrder);
                             reOrderTodos(newOrder, todo)
                         }}
                         group="shared-group-name"

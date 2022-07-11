@@ -68,10 +68,77 @@ const initialState = [
 ]
 
 
+const initialState_ = {
+    todo: [
+        {
+            title: 'Hacer deporte',
+            description: 'lorem ipsum',
+            status: 'todo',
+            labels: ['work'],
+            color: '#fff',
+            id: "543",
+            order: 0,
+        },
+    ],
+    doing: [
+        {
+            title: 'Estudiar',
+            description: 'lorem ipsum',
+            status: 'doing',
+            labels: ['work'],
+            color: '#fff',
+            id: "613",
+            order: 0,
+        },
+    ],
+    done: [
+        {
+            title: 'Comer',
+            description: 'lorem ipsum',
+            status: 'done',
+            labels: ['work'],
+            color: '#fff',
+            id: "13",
+            order: 0,
+        },
+        {
+            title: 'Trabajar',
+            description: 'lorem ipsum',
+            status: 'done',
+            labels: ['work'],
+            color: '#fff',
+            id: "1543",
+            order: 1
+        },
+        {
+            title: 'Dormir',
+            description: 'lorem ipsum',
+            status: 'done',
+            labels: ['work'],
+            color: '#fff',
+            id: "35",
+            order: 2
+        }
+    ]
+}
+
+
+
 function TodoProvider({ children }) {
     const [isOpen, toggleModal] = useState();
     const [todos, setTodos] = useState(initialState);
+    const [todos_, setTodos_] = useState(initialState_);
     const [status, setStatus] = useState(STATUS);
+    let filterStatus;
+    const statusOrdered = [...STATUS.sort((a, b) => a.order - b.order)];
+    statusOrdered.map(({ name }) => {
+        filterStatus = {
+            ...filterStatus,
+            [name]: todos.filter(({ status }) => status == name).map(({ id }) => id)
+        }
+    })
+
+    console.log('filterStatus', filterStatus);
 
     const todoes = status.map(({ name, order }) => {
         return {
@@ -133,7 +200,9 @@ function TodoProvider({ children }) {
             todos,
             isOpen,
             allTodos,
-            status
+            status,
+            todos_,
+            filterStatus
         },
         actions: {
             addTodo,

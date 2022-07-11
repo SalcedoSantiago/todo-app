@@ -1,0 +1,130 @@
+import React, { useState } from "react";
+import {
+    DndContext,
+    KeyboardSensor,
+    PointerSensor,
+    useSensor,
+    useSensors
+} from "@dnd-kit/core";
+import { sortableKeyboardCoordinates } from "@dnd-kit/sortable";
+
+import DroppableList from "./DroppableList";
+import { arrayMove, insertAtIndex, removeAtIndex } from "./utils/array";
+import { useTodos } from "../../hooks";
+import { Stack, Box } from '@chakra-ui/react';
+
+function ContainerCards() {
+    const { filterStatus } = useTodos();
+    const [items, setItems] = useState(filterStatus);
+
+
+    const sensors = useSensors(
+        useSensor(PointerSensor),
+        useSensor(KeyboardSensor, {
+            coordinateGetter: sortableKeyboardCoordinates
+        })
+    );
+
+    const handleDragOver = ({ over, active }) => {
+        const overId = over?.id;
+
+        if (!overId) {
+            return;
+        }
+
+        const activeContainer = active.data.current.sortable.containerId;
+        const overContainer = over.data.current?.sortable.containerId;
+
+        if (!overContainer) {
+            return;
+        }
+
+        if (activeContainer !== overContainer) {
+            setItems((items) => {
+                const activeIndex = active.data.current.sortable.index;
+                const overIndex = over.data.current?.sortable.index || 0;
+
+                return moveBetweenContainers(
+                    items,
+                    activeContainer,
+                    activeIndex,
+                    overContainer,
+                    overIndex,
+                    active.id
+                );
+            });
+        }
+    };
+
+    const handleDragEnd = ({ active, over }) => {
+        if (!over) {
+            return;
+        }
+
+        if (active.id !== over.id) {
+            const activeContainer = active.data.current.sortable.containerId;
+            const overContainer = over.data.current?.sortable.containerId || over.id;
+            const activeIndex = active.data.current.sortable.index;
+            const overIndex = over.data.current?.sortable.index || 0;
+
+            setItems((items) => {
+                let newItems;
+                if (activeContainer === overContainer) {
+                    newItems = {
+                        ...items,
+                        [overContainer]: arrayMove(
+                            items[overContainer],
+                            activeIndex,
+                            overIndex
+                        )
+                    };
+                } else {
+                    newItems = moveBetweenContainers(
+                        items,
+                        activeContainer,
+                        activeIndex,
+                        overContainer,
+                        overIndex,
+                        active.id
+                    );
+                }
+
+                return newItems;
+            });
+        }
+    };
+
+    const moveBetweenContainers = (
+        items,
+        activeContainer,
+        activeIndex,
+        overContainer,
+        overIndex,
+        item
+    ) => {
+        return {
+            ...items,
+            [activeContainer]: removeAtIndex(items[activeContainer], activeIndex),
+            [overContainer]: insertAtIndex(items[overContainer], overIndex, item)
+        };
+    };
+
+
+    return (
+        <DndContext
+            sensors={sensors}
+            onDragEnd={handleDragEnd}
+            onDragOver={handleDragOver}
+        >
+            <Stack direction={'row'} >
+                {Object.keys(items).map((group) => (
+                    <Box w="200px" key={group}>
+                        <DroppableList id={group} items={items[group]} />
+                    </Box>
+                ))}
+            </Stack>
+        </DndContext>
+    );
+}
+
+export default ContainerCards;

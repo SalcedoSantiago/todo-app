@@ -5,7 +5,6 @@ import React from 'react';
 import { noop } from 'lodash';
 import { Stack, Box, useDisclosure } from '@chakra-ui/react';
 
-
 const Add = (props) => {
     const {
         onClick = noop

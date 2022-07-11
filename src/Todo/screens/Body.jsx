@@ -13,6 +13,7 @@ import ListTodos from '../Components/List';
 import { useTodos } from '../hooks';
 import NewTodo from '../Components/modal/Screens/NewTodo';
 import Card from '../Components/Card';
+import ContainerCards from '../Components/Draggable/ContainerCards';
 
 const Body = () => {
     const { todos, toggleModal, allTodos, status } = useTodos();
@@ -39,12 +40,13 @@ const Body = () => {
                 </Box>
             </Stack>
             <Stack
-                py={5}
-                direction="row"
-                flex={1}
-                alignItems="start"
-                gap={4}
-                h="70vh"
+                // py={5}
+                // direction="row"
+                // flex={1}
+                // alignItems="start"
+                // gap={4}
+                // h="70vh"
+                w={'full'}
             >
                 {/* <Grid
                     templateColumns={`150px, 1fr`}
@@ -64,10 +66,11 @@ const Body = () => {
                     )}
 
                 </Grid> */}
-                {map(allTodos, (todo, index) =>
+                {/* {map(allTodos, (todo, index) =>
                     <ListTodos key={index} todo={todo} />
                 )
-                }
+                } */}
+                <ContainerCards />
             </Stack>
             <NewTodo type={typeTodo} />
         </Box>
