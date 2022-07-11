@@ -8,6 +8,7 @@ const Card = ({ todo }) => {
     const [currentTodo, setCurrentTodo] = useState({});
     const optionRef = useRef();
 
+
     return (
         <Box
             position="relative"
@@ -26,14 +27,14 @@ const Card = ({ todo }) => {
                 setCurrentTodo(todo);
                 setOpenModal(true)
             }}
-            // maxHeight="100px"
+        // maxHeight="100px"
         >
             <Stack pb={2} direction={'row'} justifyContent={'space-between'} alignItems="center">
                 <Text
                     px={2}
                     fontWeight={600}
                 >
-                    {todo.title}
+                    {todo?.title ? todo.title : 'Uname'}
                 </Text>
                 <Box>
                     <CardActions
@@ -46,10 +47,9 @@ const Card = ({ todo }) => {
             </Stack>
             <Box px={2} >
                 <Text>
-                    {todo.description}
+                    {todo?.description ? todo.description : ''}
                 </Text>
             </Box>
-            <ModalCurrent isOpen={openModal} toggleModal={setOpenModal} currentTodo={currentTodo} setCurrentTodo={setCurrentTodo} />
         </Box>
     )
 }

@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import { Box, Text, Spinner, Textarea, Stack, Badge, Input, Select, Button } from '@chakra-ui/react';
 import { CirclePicker } from "react-color";
 import data from '@emoji-mart/data'
@@ -15,31 +15,16 @@ import { useTodos } from '../../../hooks';
 import { map } from 'lodash';
 import DueDate from '../components/DueDate';
 
-const CurrentTodo = ({ isOpen, toggleModal, currentTodo, setCurrentTodo }) => {
-    const { todos, updateTodo, status } = useTodos();
+const CurrentTodo = ({ isOpen, toggleModal, id }) => {
+    const { updateTodo, status, flattenTodos } = useTodos();
     const ref = useRef()
-
-    useEffect(() => {
-
-    }, [currentTodo])
+    const currTodo = flattenTodos.filter((todo) => todo.id == id)[0];
+    const [currentTodo, setCurrentTodo] = useState(currTodo);
 
 
     useEffect(() => {
-        new Picker({  data, ref })
+        new Picker({ data, ref })
     }, [])
-
-
-    const handleAddTitle = ({ target: { value } }) => {
-        setCurrentTodo({ ...currentTodo, title: value });
-    }
-
-    const handleChangeStatus = ({ target: { value } }) => {
-        setCurrentTodo({ ...currentTodo, status: value });
-    }
-
-    const handleChangeDesc = ({ target: { value } }) => {
-        setCurrentTodo({ ...currentTodo, description: value });
-    }
 
     const handleOnSave = () => {
         updateTodo(currentTodo);
@@ -51,20 +36,27 @@ const CurrentTodo = ({ isOpen, toggleModal, currentTodo, setCurrentTodo }) => {
         toggleModal(false)
     }
 
+    const handleUpdate = (value, key) => {
+        setCurrentTodo((prev) => { return { ...prev, [key]: value } })
+    };
+
+
     return (
         <ModalContainer toggleModal={toggleModal} isOpen={isOpen} onSave={handleOnSave}  >
-            <Input variant='unstyled' value={currentTodo.title} onInput={handleAddTitle} />
+            <Input variant='unstyled' value={currentTodo.title} onInput={({ target: { value } }) => { handleUpdate(value, 'title') }} />
             <Box>
                 <Stack direction={'row'} alignItems={'center'}>
                     <Text>Status</Text>
-                    <Select value={currentTodo.status} onChange={handleChangeStatus}>
+                    <Select
+                        value={currentTodo.status}
+                        onChange={({ target: { value } }) => { handleUpdate(value, 'status') }}
+                    >
                         {map(status, ({ name }, index) =>
                             <option key={name} value={name}>{name}</option>
                         )}
                     </Select>
                 </Stack>
                 {/* <div ref={ref} /> */}
-
                 <DueDate
                     date={currentTodo.date}
                 />
@@ -72,7 +64,7 @@ const CurrentTodo = ({ isOpen, toggleModal, currentTodo, setCurrentTodo }) => {
                     <Text>To do</Text>
                     <Textarea
                         value={currentTodo.description}
-                        onChange={handleChangeDesc}
+                        onChange={({ target: { value } }) => { handleUpdate(value, 'description') }}
                         placeholder='Here is a sample placeholder'
                         size='sm'
                     />
@@ -82,8 +74,8 @@ const CurrentTodo = ({ isOpen, toggleModal, currentTodo, setCurrentTodo }) => {
                     colors={
                         ["#fff", "#03a9f4", "#009688", "#ffeb3b", "#ff9800", "#795548", "#607d8b"]
                     }
-                    onChange={(color) => {
-                        setCurrentTodo({ ...currentTodo, color: color.hex });
+                    onChange={({ hex }) => {
+                        handleUpdate(hex, 'color')
                     }}
                 />
             </Box>

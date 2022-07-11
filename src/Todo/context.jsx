@@ -19,59 +19,53 @@ const STATUS = [
 
 ]
 
-const initialState = {
-    todo: [
-        {
-            title: 'Hacer deporte',
-            description: 'lorem ipsum',
-            status: 'todo',
-            labels: ['work'],
-            color: '#fff',
-            id: "543",
-            order: 0,
-        },
-    ],
-    doing: [
-        {
-            title: 'Estudiar',
-            description: 'lorem ipsum',
-            status: 'doing',
-            labels: ['work'],
-            color: '#fff',
-            id: "613",
-            order: 0,
-        },
-    ],
-    done: [
-        {
-            title: 'Comer',
-            description: 'lorem ipsum',
-            status: 'done',
-            labels: ['work'],
-            color: '#fff',
-            id: "13",
-            order: 0,
-        },
-        {
-            title: 'Trabajar',
-            description: 'lorem ipsum',
-            status: 'done',
-            labels: ['work'],
-            color: '#fff',
-            id: "1543",
-            order: 1
-        },
-        {
-            title: 'Dormir',
-            description: 'lorem ipsum',
-            status: 'done',
-            labels: ['work'],
-            color: '#fff',
-            id: "35",
-            order: 2
-        }
-    ]
-}
+const initialState = [
+    {
+        title: 'Hacer deporte',
+        description: 'lorem ipsum',
+        status: 'todo',
+        labels: ['work'],
+        color: '#fff',
+        id: "543",
+        order: 0,
+    },
+    {
+        title: 'Estudiar',
+        description: 'lorem ipsum',
+        status: 'doing',
+        labels: ['work'],
+        color: '#fff',
+        id: "613",
+        order: 0,
+    },
+    {
+        title: 'Comer',
+        description: 'lorem ipsum',
+        status: 'done',
+        labels: ['work'],
+        color: '#fff',
+        id: "13",
+        order: 0,
+    },
+    {
+        title: 'Trabajar',
+        description: 'lorem ipsum',
+        status: 'done',
+        labels: ['work'],
+        color: '#fff',
+        id: "1543",
+        order: 1
+    },
+    {
+        title: 'Dormir',
+        description: 'lorem ipsum',
+        status: 'done',
+        labels: ['work'],
+        color: '#fff',
+        id: "35",
+        order: 2
+    }
+]
 
 
 
@@ -80,38 +74,68 @@ function TodoProvider({ children }) {
     const [todos, setTodos] = useState(initialState);
     const [status, setStatus] = useState(STATUS);
     const flattenTodos = flatten(Object.values(todos));
+
     const filterStatus = [...STATUS.sort((a, b) => a.order - b.order)].reduce((obj, { name }) => {
         return {
             ...obj,
-            [name]: flattenTodos.filter(({ status }) => status == name).map(({ id }) => id),
+            [name]: todos.filter(({ status }) => status == name).map(({ id }) => id),
         };
     }, {})
 
+    const [statusItems, setStatusItems] = useState(filterStatus);
+
+
+    console.log('statusItems', statusItems);
 
     const addTodo = (todo, currStatus) => {
         const id = uniqueId();
-        setTodos({
+        setTodos([
             ...todos,
-            [currStatus]: [
-                ...todos[currStatus],
-                {
-                    ...todo,
-                    id: id
-                }
-            ]
-        }
-        )
+            {
+                ...todo,
+                id: id
+            }
+        ])
+
+        setStatusItems((items) => {
+            return {
+                ...items,
+                [currStatus]: [
+                    ...items[currStatus],
+                    id
+                ]
+            }
+        })
     }
 
     const updateTodo = (currentTodo) => {
-        const newTodos = todos.map((todo) => {
-            if (todo.id === currentTodo.id) {
-                return currentTodo
-            }
-            return todo
-        })
+        const { id, status } = currentTodo;
+        const prevTodo = flattenTodos.filter((todo) => todo.id == id)[0];
 
-        setTodos(newTodos);
+        if (currentTodo.status != prevTodo.status) {
+            setStatusItems(prev => {
+                return {
+                    ...prev,
+                    [prevTodo.status]: prev[prevTodo.status].filter((item) => item != id),
+                    [status]: [
+                        ...prev[status],
+                        id
+                    ]
+                }
+            })
+        }
+
+        setTodos((prev) => {
+            return prev.map((todo) => {
+                if (todo.id == id) {
+                    return {
+                        ...todo,
+                        ...currentTodo,
+                    }
+                }
+                return todo
+            })
+        })
     }
 
 
@@ -141,14 +165,16 @@ function TodoProvider({ children }) {
             isOpen,
             flattenTodos,
             status,
-            filterStatus
+            filterStatus,
+            statusItems
         },
         actions: {
             addTodo,
             toggleModal,
             deleteTodo,
             updateTodo,
-            reOrderTodos
+            reOrderTodos,
+            setStatusItems
         }
     }
 

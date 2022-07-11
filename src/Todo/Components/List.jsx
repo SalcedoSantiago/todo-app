@@ -39,7 +39,6 @@ const ListTodos = ({ todo }) => {
                         list={items}
                         //  setList={()=>{setState}
                         setList={(newState) => {
-                            // console.log('newState', newState);
                             const newOrder = newState.map((todo, index) => {
                                 return {
                                     ...todo,
