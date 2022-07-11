@@ -1,20 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import {
-  CancelDrop,
   closestCorners,
-  CollisionDetection,
   DndContext,
   DragOverlay,
   KeyboardSensor,
-  Modifiers,
   PointerSensor,
   useDroppable,
-  UniqueIdentifier,
   useSensors,
   useSensor,
   defaultDropAnimation,
-  DropAnimation
 } from "@dnd-kit/core";
 
 import {
@@ -22,23 +17,15 @@ import {
   arrayMove,
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
-  SortingStrategy
 } from "@dnd-kit/sortable";
 
+import { Stack, Box } from '@chakra-ui/react';
 import { Item, SortableItem } from "./Item";
-import { List } from "./List";
+import List from "./List";
+import { useTodos } from "../../hooks";
+import CardTodo from '../Card';
 
-const defaultInitializer = (index) => index;
 
-export function createRange(
-  length,
-  initializer,
-){
-  return [...new Array(length)].map((_, index) => initializer(index));
-}
-export default {
-  title: "Presets/Sortable/Multiple Containers"
-};
 
 function DroppableContainer({
   children,
@@ -54,7 +41,7 @@ function DroppableContainer({
 
   return (
     <List
-      ref={setNodeRef}
+      forwarRef={setNodeRef}
       style={getStyle({ isOverContainer })}
       columns={columns}
     >
@@ -66,12 +53,6 @@ const dropAnimation = {
   ...defaultDropAnimation,
   dragSourceOpacity: 0.5
 };
-export const defaultContainerStyle = ({ isOverContainer }) => ({
-  marginTop: 40,
-  backgroundColor: isOverContainer
-    ? "rgb(235,235,235,1)"
-    : "rgba(246,246,246,1)"
-});
 
 export const VOID_ID = "void";
 
@@ -81,24 +62,21 @@ export function MultipleContainers({
   collisionDetection = closestCorners,
   columns,
   items: initialItems,
-  getContainerStyle = defaultContainerStyle,
   modifiers,
   strategy = verticalListSortingStrategy,
   trashable = false,
   vertical = false
 }) {
-  const [items, setItems] = useState(
-    () =>
-      initialItems ?? {
-        A: createRange(itemCount, (index) => `A${index + 1}`),
-        B: createRange(itemCount, (index) => `B${index + 1}`),
-        C: createRange(itemCount, (index) => `C${index + 1}`),
-        D: createRange(itemCount, (index) => `D${index + 1}`),
-        [VOID_ID]: []
-      }
-  );
-  const [clonedItems, setClonedItems] = React.useState < Items | null > (null);
-  const [activeId, setActiveId] = React.useState < string | null > (null);
+  const { filterStatus, todos, toggleModal, flattenTodos } = useTodos();
+
+
+  useEffect(() => {
+    setItems(filterStatus)
+  }, [filterStatus])
+
+  const [items, setItems] = useState(filterStatus);
+  const [clonedItems, setClonedItems] = useState(null);
+  const [activeId, setActiveId] = useState(null);
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -131,14 +109,12 @@ export function MultipleContainers({
       }}
       onDragOver={({ active, over }) => {
         const overId = over?.id;
-
         if (!overId) {
+          console.log('no over ide');
           return;
         }
-
         const overContainer = findContainer(overId);
         const activeContainer = findContainer(active.id);
-
         if (!overContainer || !activeContainer) {
           return;
         }
@@ -182,7 +158,8 @@ export function MultipleContainers({
           });
         }
       }}
-      onDragEnd={({ active, over }) => {
+      onDragEnd={(parameters) => {
+        const { active, over, delta } = parameters;
         const activeContainer = findContainer(active.id);
 
         if (!activeContainer) {
@@ -192,11 +169,13 @@ export function MultipleContainers({
 
         const overId = over?.id || VOID_ID;
 
-        if (overId === VOID_ID) {
+        if (overId === VOID_ID || (delta.x == 0 && delta.y == 0)) {
           setItems((items) => ({
             ...(trashable && over?.id === VOID_ID ? items : clonedItems),
             [VOID_ID]: []
           }));
+          toggleModal(true);
+          console.log('active.id', active.id);
           setActiveId(null);
           return;
         }
@@ -225,7 +204,7 @@ export function MultipleContainers({
       onDragCancel={onDragCancel}
       modifiers={modifiers}
     >
-      <div className="inline-grid items-start grid-flow-col gap-4 bg-blue-400 w-full h-screen p-8 font-sans">
+      <Stack direction="row">
         {Object.keys(items)
           .filter((key) => key !== VOID_ID)
           .map((containerId) => (
@@ -238,22 +217,24 @@ export function MultipleContainers({
                 id={containerId}
                 columns={columns}
                 items={items[containerId]}
-                getStyle={getContainerStyle}
               >
-                {items[containerId].map((value, index) => {
-                  return (
-                    <SortableItem key={value} id={value}>
-                      {value}
-                    </SortableItem>
-                  );
-                })}
+                {items[containerId].map((value, index) =>
+                  <SortableItem key={value} id={value}>
+                    <CardTodo todo={flattenTodos.filter((todo) => todo.id == value)[0]} />
+                  </SortableItem>
+                )
+                }
               </DroppableContainer>
             </SortableContext>
           ))}
-      </div>
+      </Stack>
       {createPortal(
-        <DragOverlay dropAnimation={dropAnimation} adjustScale={true}>
-          {activeId ? <Item id={activeId}>{activeId}</Item> : null}
+        <DragOverlay dropAnimation={dropAnimation} adjustScale={false}>
+          {activeId ?
+            <Box id={activeId} maxH={'100px'}>
+              <CardTodo todo={flattenTodos.filter((todo) => todo.id == activeId)[0]} />
+            </Box>
+            : null}
         </DragOverlay>,
         document.body
       )}

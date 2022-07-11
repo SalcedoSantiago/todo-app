@@ -13,10 +13,10 @@ import ListTodos from '../Components/List';
 import { useTodos } from '../hooks';
 import NewTodo from '../Components/modal/Screens/NewTodo';
 import Card from '../Components/Card';
-import ContainerCards from '../Components/Draggable/ContainerCards';
+import { MultipleContainers } from "../Components/Draggable/MultipleContainers";
 
 const Body = () => {
-    const { todos, toggleModal, allTodos, status } = useTodos();
+    const { todos, toggleModal,  status } = useTodos();
     const [typeTodo, setTypeTodo] = useState('todo');
 
     return (
@@ -40,37 +40,10 @@ const Body = () => {
                 </Box>
             </Stack>
             <Stack
-                // py={5}
-                // direction="row"
-                // flex={1}
-                // alignItems="start"
-                // gap={4}
-                // h="70vh"
+                overflow={'hidden'}
                 w={'full'}
             >
-                {/* <Grid
-                    templateColumns={`150px, 1fr`}
-                    templateAreas={"'0 1 2'"}
-                    gap={4}
-                >
-                    {todos.map((todo) =>
-                        <GridItem
-                            key={todo.id}
-                            gridArea={status.filter((statues) => statues.name == todo.status)[0].order - 1}
-                            data-test={status.filter((statues) => statues.name == todo.status)[0].order - 1}
-                        >
-                            <Card
-                                todo={todo}
-                            />
-                        </GridItem>
-                    )}
-
-                </Grid> */}
-                {/* {map(allTodos, (todo, index) =>
-                    <ListTodos key={index} todo={todo} />
-                )
-                } */}
-                <ContainerCards />
+                <MultipleContainers />
             </Stack>
             <NewTodo type={typeTodo} />
         </Box>

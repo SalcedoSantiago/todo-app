@@ -1,4 +1,4 @@
-import { map, isEqual, uniqueId } from "lodash";
+import { flatten, map, isEqual, uniqueId, isObject } from "lodash";
 import { createContext, useMemo, useState } from "react";
 
 const TodoContext = createContext({});
@@ -19,56 +19,7 @@ const STATUS = [
 
 ]
 
-const initialState = [
-    {
-        title: 'Hacer deporte',
-        description: 'lorem ipsum',
-        status: 'todo',
-        labels: ['work'],
-        color: '#fff',
-        id: "543",
-        order: 0,
-    },
-    {
-        title: 'Estudiar',
-        description: 'lorem ipsum',
-        status: 'doing',
-        labels: ['work'],
-        color: '#fff',
-        id: "613",
-        order: 0,
-    },
-    {
-        title: 'Comer',
-        description: 'lorem ipsum',
-        status: 'done',
-        labels: ['work'],
-        color: '#fff',
-        id: "13",
-        order: 1,
-    },
-    {
-        title: 'Trabajar',
-        description: 'lorem ipsum',
-        status: 'done',
-        labels: ['work'],
-        color: '#fff',
-        id: "1543",
-        order: 0
-    },
-    {
-        title: 'Dormir',
-        description: 'lorem ipsum',
-        status: 'done',
-        labels: ['work'],
-        color: '#fff',
-        id: "35",
-        order: 2
-    }
-]
-
-
-const initialState_ = {
+const initialState = {
     todo: [
         {
             title: 'Hacer deporte',
@@ -127,40 +78,29 @@ const initialState_ = {
 function TodoProvider({ children }) {
     const [isOpen, toggleModal] = useState();
     const [todos, setTodos] = useState(initialState);
-    const [todos_, setTodos_] = useState(initialState_);
     const [status, setStatus] = useState(STATUS);
-    let filterStatus;
-    const statusOrdered = [...STATUS.sort((a, b) => a.order - b.order)];
-    statusOrdered.map(({ name }) => {
-        filterStatus = {
-            ...filterStatus,
-            [name]: todos.filter(({ status }) => status == name).map(({ id }) => id)
-        }
-    })
-
-    console.log('filterStatus', filterStatus);
-
-    const todoes = status.map(({ name, order }) => {
+    const flattenTodos = flatten(Object.values(todos));
+    const filterStatus = [...STATUS.sort((a, b) => a.order - b.order)].reduce((obj, { name }) => {
         return {
-            type: name,
-            title: name,
-            order: order,
-            items: [...todos.filter(({ status }) => status == name)].sort((a, b) => a.order - b.order)
-        }
-    }
-    );
+            ...obj,
+            [name]: flattenTodos.filter(({ status }) => status == name).map(({ id }) => id),
+        };
+    }, {})
 
-    const allTodos = useMemo(() => [...todoes.sort((a, b) => a.order - b.order)], todoes);
 
-    const addTodo = (todo) => {
+    const addTodo = (todo, currStatus) => {
         const id = uniqueId();
-        setTodos([
+        setTodos({
             ...todos,
-            {
-                ...todo,
-                id: uniqueId()
-            }
-        ])
+            [currStatus]: [
+                ...todos[currStatus],
+                {
+                    ...todo,
+                    id: id
+                }
+            ]
+        }
+        )
     }
 
     const updateTodo = (currentTodo) => {
@@ -199,9 +139,8 @@ function TodoProvider({ children }) {
         state: {
             todos,
             isOpen,
-            allTodos,
+            flattenTodos,
             status,
-            todos_,
             filterStatus
         },
         actions: {
@@ -214,7 +153,7 @@ function TodoProvider({ children }) {
     }
 
 
-    if (!Boolean(allTodos.length)) {
+    if (!Boolean(todos)) {
         return <>
             test
         </>

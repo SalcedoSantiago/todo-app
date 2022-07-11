@@ -26,6 +26,7 @@ const Card = ({ todo }) => {
                 setCurrentTodo(todo);
                 setOpenModal(true)
             }}
+            // maxHeight="100px"
         >
             <Stack pb={2} direction={'row'} justifyContent={'space-between'} alignItems="center">
                 <Text

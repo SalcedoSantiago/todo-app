@@ -8,9 +8,8 @@ export function useTodos() {
         state: {
             todos,
             isOpen,
-            allTodos,
             status,
-            todos_,
+            flattenTodos,
             filterStatus
         },
         actions: {
@@ -27,10 +26,9 @@ export function useTodos() {
     return {
         todos,
         filterStatus,
-        todos_,
-        addTodo,
-        allTodos,
         status,
+        addTodo,
+        flattenTodos,
         isOpen,
         toggleModal,
         deleteTodo,

@@ -26,7 +26,9 @@ const NewTodo = ({ type }) => {
             status: typeSelected,
             color: blockPickerColor,
             order: 4
-        });
+        },
+            typeSelected
+        );
         setDesc('');
         setTitle('');
         setBlockPickerColor('#fff');
@@ -56,7 +58,7 @@ const NewTodo = ({ type }) => {
                 <Stack direction={'row'} alignItems={'center'}>
                     <Text>Status</Text>
                     <Select value={typeSelected} onChange={({ target: { value } }) => { setTypeSelected(value) }}>
-                        {map(status, ({ name }, index) =>
+                        {map(status, ({ name }) =>
                             <option key={name} value={name}>{name}</option>
                         )}
                     </Select>
