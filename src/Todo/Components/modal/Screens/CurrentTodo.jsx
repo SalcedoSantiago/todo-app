@@ -3,7 +3,7 @@
  */
 import React, { useState } from 'react'
 import { Box, Text, Divider, Stack, Input, Select, Button } from '@chakra-ui/react';
-import { EditIcon } from '@chakra-ui/icons';
+
 /**
  * Internal dependencies
  */
@@ -16,6 +16,8 @@ import Label from '../components/Label';
 import TodoText from '../components/TodoText';
 import ColorPicker from '../components/ColorPicker';
 import HeadingTodo from '../components/HeadingTodo';
+import StatusPicker from '../components/StatusPicker';
+import Actions from '../components/Actions';
 
 const CurrentTodo = ({ isOpen, toggleModal, id }) => {
     const { updateTodo, status, todos } = useTodos();
@@ -40,26 +42,15 @@ const CurrentTodo = ({ isOpen, toggleModal, id }) => {
 
     return (
         <ModalContainer toggleModal={toggleModal} isOpen={isOpen} onSave={handleOnSave}  >
-            {/* <Input variant='unstyled' value={currentTodo.title} onInput={({ target: { value } }) => { handleUpdate(value, 'title') }} /> */}
-
             <HeadingTodo
-                currentTodo={currentTodo}
+                value={currentTodo.title}
+                onChange={handleUpdate}
             />
-
             <Box>
-                <Stack direction={'row'} alignItems={'center'} py={2} spacing={10}>
-                    <Text fontSize={'md'} color={'gray.500'}>Status</Text>
-                    <Select
-                        variant='unstyled'
-                        value={currentTodo.status}
-                        w="auto"
-                        onChange={({ target: { value } }) => { handleUpdate(value, 'status') }}
-                    >
-                        {map(status, ({ name }, index) =>
-                            <option key={name} value={name}>{name}</option>
-                        )}
-                    </Select>
-                </Stack>
+                <StatusPicker
+                    value={currentTodo.status}
+                    onChange={({ target: { value } }) => { handleUpdate(value, 'status') }}
+                />
                 <DueDate
                     date={currentTodo.date}
                 />
@@ -70,24 +61,25 @@ const CurrentTodo = ({ isOpen, toggleModal, id }) => {
                 />
                 <TodoText
                     title={'Todo'}
+                    value={currentTodo.description}
+                    onChange={({ target: { value } }) => { handleUpdate(value, 'description') }}
                 />
                 <Divider py={2} colorScheme="gray" />
                 <TodoText
                     title={'Activity'}
+                    value={currentTodo?.activity ? currentTodo.activity : ''}
+                    onChange={({ target: { value } }) => { handleUpdate(value, 'activity') }}
                 />
             </Box>
             <Stack direction="row" justifyContent={'end'} pt={10} alignItems='center'>
                 <ColorPicker
+                    value={currentTodo.color}
+                    onChange={handleUpdate}
                 />
-                <Stack direction="row" justifyContent={'end'} mt={6}>
-                    <Button colorScheme='blue' mr={3} onClick={handleCancel}>
-                        Close
-                    </Button>
-                    <Button colorScheme={'green'} onClick={handleOnSave}>
-                        Save
-                    </Button>
-                </Stack>
-
+                <Actions
+                    onCancel={handleCancel}
+                    onSave={handleOnSave}
+                />
             </Stack>
         </ModalContainer >
     )

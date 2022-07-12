@@ -1,5 +1,5 @@
-import { flatten, map, isEqual, uniqueId, isObject } from "lodash";
-import { createContext, useMemo, useState } from "react";
+import { flatten, map, isEqual, uniqueId } from "lodash";
+import { createContext, useMemo, useState, useEffect } from "react";
 
 const TodoContext = createContext({});
 
@@ -73,18 +73,35 @@ function TodoProvider({ children }) {
     const [isOpen, toggleModal] = useState();
     const [todos, setTodos] = useState(initialState);
     const [status, setStatus] = useState(STATUS);
-
-    const filterStatus = [...STATUS.sort((a, b) => a.order - b.order)].reduce((obj, { name }) => {
-        return {
-            ...obj,
+    const [orderStatus, setOrderStatus] = useState(['todo', 'doing', 'done'])
+    const [statusItems, setStatusItems] = useState(orderStatus.reduce((acc, name) => (
+        {
+            ...acc,
             [name]: todos.filter(({ status }) => status == name).map(({ id }) => id),
-        };
-    }, {})
+        }
+    ), {}));
 
-    const [statusItems, setStatusItems] = useState(filterStatus);
 
-    const addTodo = (todo, currStatus) => {
+    const addStatus = () => {
         const id = uniqueId();
+        // const 
+        // setOrderStatus((prev) => (['todo', 'doing', 'done', id]))
+        setStatus((prev) => ([
+            ...prev,
+            {
+                name: id,
+                order: prev.length + 1
+            }
+        ]))
+        // setStatusItems((prev) => ({
+        //     ...prev,
+        //     [id]: []
+        // }))
+    }
+
+    const addTodo = (todo) => {
+        const id = uniqueId();
+        const { status } = todo;
         setTodos([
             ...todos,
             {
@@ -96,8 +113,8 @@ function TodoProvider({ children }) {
         setStatusItems((items) => {
             return {
                 ...items,
-                [currStatus]: [
-                    ...items[currStatus],
+                [status]: [
+                    ...items[status],
                     id
                 ]
             }
@@ -135,17 +152,6 @@ function TodoProvider({ children }) {
     }
 
 
-    const reOrderTodos = (currentTodo) => {
-        const newTodos = todos.map((todo) => {
-            const current = currentTodo.filter((cur) => cur.id == todo.id)[0]
-            if (!!current) {
-                return current
-            }
-            return todo;
-        })
-        setTodos(newTodos)
-    }
-
     const deleteTodo = (_todo) => {
         if (!_todo) {
             return;
@@ -160,7 +166,6 @@ function TodoProvider({ children }) {
             todos,
             isOpen,
             status,
-            filterStatus,
             statusItems
         },
         actions: {
@@ -168,8 +173,8 @@ function TodoProvider({ children }) {
             toggleModal,
             deleteTodo,
             updateTodo,
-            reOrderTodos,
             setTodos,
+            addStatus,
             setStatusItems
         }
     }

@@ -9,7 +9,6 @@ export function useTodos() {
             todos,
             isOpen,
             status,
-            filterStatus,
             statusItems,
         },
         actions: {
@@ -17,9 +16,9 @@ export function useTodos() {
             toggleModal,
             deleteTodo,
             updateTodo,
-            reOrderTodos,
             setStatusItems,
             setTodos,
+            addStatus,
         }
     } = useContext(TodoContext);
 
@@ -27,14 +26,13 @@ export function useTodos() {
     return {
         setTodos,
         todos,
-        filterStatus,
         status,
+        addStatus,
         addTodo,
         isOpen,
         toggleModal,
         deleteTodo,
         updateTodo,
-        reOrderTodos,
         setStatusItems,
         statusItems,
     }

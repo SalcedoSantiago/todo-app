@@ -1,15 +1,55 @@
+import { useState } from 'react'
 import { Box, Text, Divider, Heading, Stack, Input, Select, Button } from '@chakra-ui/react';
-import { EditIcon } from '@chakra-ui/icons';
+import { EditIcon, CloseIcon, CheckIcon } from '@chakra-ui/icons';
 
-const HeadingTodo = ({ currentTodo }) => {
+
+const HeadingTodo = ({ onChange, value }) => {
+    const [isEdit, setIsEdit] = useState(false)
+    const [text, setText] = useState(value);
+
+
     return (
         <Stack pb={4} direction="row" >
-            <Heading fontWeight={600} flex={1}>
-                {currentTodo.title}
-            </Heading>
-            <Button>
-                <EditIcon />
-            </Button>
+            {!isEdit ?
+                <Heading m={0} fontWeight={600} flex={1}>
+                    {value}
+                </Heading>
+                :
+                <Input
+                    fontWeight={600}
+                    fontSize="2xl"
+                    color={'gray.600'}
+                    variant='filled'
+                    p={0}
+                    value={text}
+                    onInput={({ target: { value } }) => { setText(value) }}
+                />
+            }
+            {!isEdit ?
+                <Button onClick={() => { setIsEdit(prev => !prev) }}>
+                    <EditIcon />
+                </Button>
+                :
+                <Stack direction={'row'} alignItems={'center'}>
+                    <Button
+                        onClick={() => {
+                            setIsEdit(prev => !prev);
+                            setText(value);
+                        }}
+                        colorScheme='red'>
+                        <CloseIcon />
+                    </Button>
+                    <Button
+                        onClick={() => {
+                            onChange(text, 'title')
+                            setIsEdit(prev => !prev);
+                        }}
+                        colorScheme="green"
+                    >
+                        <CheckIcon />
+                    </Button>
+                </Stack>
+            }
         </Stack>
     )
 }

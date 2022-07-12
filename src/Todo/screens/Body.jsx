@@ -16,7 +16,7 @@ import Card from '../Components/Card';
 import { MultipleContainers } from "../Components/Draggable/MultipleContainers";
 
 const Body = () => {
-    const { todos, toggleModal,  status } = useTodos();
+    const { todos, toggleModal, status, addStatus } = useTodos();
     const [typeTodo, setTypeTodo] = useState('todo');
 
     return (
@@ -42,9 +42,14 @@ const Body = () => {
             <Stack
                 overflow={'hidden'}
                 w={'full'}
+
             >
                 <MultipleContainers />
             </Stack>
+
+            <Button onClick={() => { addStatus() }}>
+                + add new row
+            </Button>
             <NewTodo type={typeTodo} />
         </Box>
     )

@@ -2,7 +2,7 @@
  * External dependencies
  */
 import React, { useState } from 'react'
-import { Box, Text, Heading, Textarea, Stack, Badge, Input, Select, Button } from '@chakra-ui/react';
+import { Box, Text, Heading, Textarea, Stack, Badge, Input, Select, Button, Divider } from '@chakra-ui/react';
 import { CirclePicker } from "react-color";
 /**
  * Internal dependencies
@@ -10,96 +10,81 @@ import { CirclePicker } from "react-color";
 import ModalContainer from '../components/container';
 import { useTodos } from '../../../hooks';
 import { map } from 'lodash';
+import Actions from '../components/Actions';
+import HeadingTodo from '../components/HeadingTodo';
+import DueDate from '../components/DueDate';
+import StatusPicker from '../components/StatusPicker';
+import Label from '../components/Label';
+import TodoText from '../components/TodoText';
+import ColorPicker from '../components/ColorPicker';
+import Assign from '../components/Assign';
 
-const NewTodo = ({ type }) => {
-    const [desc, setDesc] = useState('');
-    const [title, setTitle] = useState('');
-    const { todos, addTodo, toggleModal, isOpen, status } = useTodos();
-    const [typeSelected, setTypeSelected] = useState('todo');
-    const [blockPickerColor, setBlockPickerColor] = useState("#fff");
-
-
+const NewTodo = () => {
+    const { addTodo, toggleModal, isOpen } = useTodos();
+    const todoDefault = {
+        title: '',
+        status: 'todo',
+        color: '#fff',
+        description: '',
+        activity: '',
+    }
+    const [currentTodo, setCurrentTodo] = useState(todoDefault)
     const handleAddTodo = () => {
-        addTodo({
-            description: desc,
-            title: title,
-            status: typeSelected,
-            color: blockPickerColor,
-            order: 4
-        },
-            typeSelected
-        );
-        setDesc('');
-        setTitle('');
-        setBlockPickerColor('#fff');
-        setTypeSelected('todo');
+        addTodo(currentTodo);
+        setCurrentTodo(todoDefault);
         toggleModal(false);
     }
 
-    const handleAddDesc = ({ target: { value } }) => {
-        setDesc(value);
-    }
-
-    const handleAddTitle = ({ target: { value } }) => {
-        setTitle(value);
-    }
+    const handleUpdate = (value, key) => {
+        setCurrentTodo((prev) => { return { ...prev, [key]: value } })
+    };
 
     const handleCancel = () => {
-        setDesc('');
-        setTitle('');
-        setTypeSelected('todo')
-        toggleModal(false)
+        setCurrentTodo(todoDefault);
+        toggleModal(false);
     }
 
     return (
         <ModalContainer toggleModal={toggleModal} isOpen={isOpen}>
-            <Input value={title} onInput={handleAddTitle} />
+            <HeadingTodo
+                value={currentTodo.title}
+                onChange={handleUpdate}
+            />
             <Box>
-                <Stack direction={'row'} alignItems={'center'}>
-                    <Text>Status</Text>
-                    <Select value={typeSelected} onChange={({ target: { value } }) => { setTypeSelected(value) }}>
-                        {map(status, ({ name }) =>
-                            <option key={name} value={name}>{name}</option>
-                        )}
-                    </Select>
-                </Stack>
-
-                <Stack direction={'row'} alignItems={'center'}>
-                    <Text>Due Date</Text>
-                    <Text>Feb 17, 2022</Text>
-                </Stack>
-
-                <Stack direction={'row'} alignItems={'center'}>
-                    <Text>Label</Text>
-                    <Badge>Feedback</Badge>
-                </Stack>
                 <Box>
-                    <Text>To do</Text>
-                    <Textarea
-                        value={desc}
-                        onChange={handleAddDesc}
-                        placeholder='Here is a sample placeholder'
-                        size='sm'
+                    <StatusPicker
+                        value={currentTodo.status}
+                        onChange={({ target: { value } }) => { handleUpdate(value, 'status') }}
+                    />
+                    <DueDate
+                        date={currentTodo.date}
+                    />
+                    <Assign />
+                    <Label />
+                    <Divider py={2}
+                        colorScheme="gray"
+                    />
+                    <TodoText
+                        title={'Todo'}
+                        value={currentTodo.description}
+                        onChange={({ target: { value } }) => { handleUpdate(value, 'description') }}
+                    />
+                    <Divider py={2} colorScheme="gray" />
+                    <TodoText
+                        title={'Activity'}
+                        value={currentTodo?.activity ? currentTodo.activity : ''}
+                        onChange={({ target: { value } }) => { handleUpdate(value, 'activity') }}
                     />
                 </Box>
             </Box>
-            <CirclePicker
-                color={blockPickerColor}
-                colors={
-                    ["#fff", "#03a9f4", "#009688", "#ffeb3b", "#ff9800", "#795548", "#607d8b"]
-                }
-                onChange={(color) => {
-                    setBlockPickerColor(color.hex);
-                }}
+            <ColorPicker
+                value={currentTodo.color}
+                onChange={handleUpdate}
             />
-            <Stack direction="row" justifyContent={'end'} py={4}>
-                <Button colorScheme='blue' mr={3} onClick={handleCancel}>
-                    Close
-                </Button>
-                <Button colorScheme={'green'} onClick={handleAddTodo}>
-                    Save
-                </Button>
-            </Stack>
+            <Actions
+                onCancel={handleCancel}
+                onSave={handleAddTodo}
+            />
         </ModalContainer>
     )
 }
