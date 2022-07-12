@@ -1,12 +1,9 @@
 /**
  * External dependencies
  */
-import React, { useRef, useEffect, useState } from 'react'
-import { Box, Text, Spinner, Textarea, Stack, Badge, Input, Select, Button } from '@chakra-ui/react';
-import { CirclePicker } from "react-color";
-import data from '@emoji-mart/data'
-import { Picker } from 'emoji-mart'
-
+import React, { useState } from 'react'
+import { Box, Text, Divider, Stack, Input, Select, Button } from '@chakra-ui/react';
+import { EditIcon } from '@chakra-ui/icons';
 /**
  * Internal dependencies
  */
@@ -14,17 +11,17 @@ import ModalContainer from '../components/container';
 import { useTodos } from '../../../hooks';
 import { map } from 'lodash';
 import DueDate from '../components/DueDate';
+import Assign from '../components/Assign';
+import Label from '../components/Label';
+import TodoText from '../components/TodoText';
+import ColorPicker from '../components/ColorPicker';
+import HeadingTodo from '../components/HeadingTodo';
 
 const CurrentTodo = ({ isOpen, toggleModal, id }) => {
     const { updateTodo, status, todos } = useTodos();
-    const ref = useRef()
     const currTodo = todos.filter((todo) => todo.id == id)[0];
     const [currentTodo, setCurrentTodo] = useState(currTodo);
 
-
-    useEffect(() => {
-        new Picker({ data, ref })
-    }, [])
 
     const handleOnSave = () => {
         updateTodo(currentTodo);
@@ -43,12 +40,19 @@ const CurrentTodo = ({ isOpen, toggleModal, id }) => {
 
     return (
         <ModalContainer toggleModal={toggleModal} isOpen={isOpen} onSave={handleOnSave}  >
-            <Input variant='unstyled' value={currentTodo.title} onInput={({ target: { value } }) => { handleUpdate(value, 'title') }} />
+            {/* <Input variant='unstyled' value={currentTodo.title} onInput={({ target: { value } }) => { handleUpdate(value, 'title') }} /> */}
+
+            <HeadingTodo
+                currentTodo={currentTodo}
+            />
+
             <Box>
-                <Stack direction={'row'} alignItems={'center'}>
-                    <Text>Status</Text>
+                <Stack direction={'row'} alignItems={'center'} py={2} spacing={10}>
+                    <Text fontSize={'md'} color={'gray.500'}>Status</Text>
                     <Select
+                        variant='unstyled'
                         value={currentTodo.status}
+                        w="auto"
                         onChange={({ target: { value } }) => { handleUpdate(value, 'status') }}
                     >
                         {map(status, ({ name }, index) =>
@@ -56,36 +60,34 @@ const CurrentTodo = ({ isOpen, toggleModal, id }) => {
                         )}
                     </Select>
                 </Stack>
-                {/* <div ref={ref} /> */}
                 <DueDate
                     date={currentTodo.date}
                 />
-                <Box>
-                    <Text>To do</Text>
-                    <Textarea
-                        value={currentTodo.description}
-                        onChange={({ target: { value } }) => { handleUpdate(value, 'description') }}
-                        placeholder='Here is a sample placeholder'
-                        size='sm'
-                    />
-                </Box>
-                <CirclePicker
-                    color={currentTodo.color}
-                    colors={
-                        ["#fff", "#03a9f4", "#009688", "#ffeb3b", "#ff9800", "#795548", "#607d8b"]
-                    }
-                    onChange={({ hex }) => {
-                        handleUpdate(hex, 'color')
-                    }}
+                <Assign />
+                <Label />
+                <Divider py={2}
+                    colorScheme="gray"
+                />
+                <TodoText
+                    title={'Todo'}
+                />
+                <Divider py={2} colorScheme="gray" />
+                <TodoText
+                    title={'Activity'}
                 />
             </Box>
-            <Stack direction="row" justifyContent={'end'}>
-                <Button colorScheme='blue' mr={3} onClick={handleCancel}>
-                    Close
-                </Button>
-                <Button colorScheme={'green'} onClick={handleOnSave}>
-                    Save
-                </Button>
+            <Stack direction="row" justifyContent={'end'} pt={10} alignItems='center'>
+                <ColorPicker
+                />
+                <Stack direction="row" justifyContent={'end'} mt={6}>
+                    <Button colorScheme='blue' mr={3} onClick={handleCancel}>
+                        Close
+                    </Button>
+                    <Button colorScheme={'green'} onClick={handleOnSave}>
+                        Save
+                    </Button>
+                </Stack>
+
             </Stack>
         </ModalContainer >
     )
