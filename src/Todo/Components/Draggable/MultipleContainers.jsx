@@ -33,7 +33,8 @@ function DroppableContainer({
   columns = 1,
   id,
   items,
-  getStyle = () => ({})
+  getStyle = () => ({}),
+  title,
 }) {
   const { over, isOver, setNodeRef } = useDroppable({
     id
@@ -45,6 +46,8 @@ function DroppableContainer({
       forwarRef={setNodeRef}
       style={getStyle({ isOverContainer })}
       columns={columns}
+      title={title}
+      count={Boolean(items?.length) ? items.length : 0}
     >
       {children}
     </List>
@@ -71,11 +74,10 @@ export function MultipleContainers({
 }) {
 
   const {
-    filterStatus,
     setStatusItems,
     statusItems,
-    toggleModal,
-    flattenTodos
+    todos,
+    setTodos
   } = useTodos();
 
   const [clonedItems, setClonedItems] = useState(null);
@@ -203,6 +205,16 @@ export function MultipleContainers({
             }
           }
 
+          const newTodo = todos.map((todo) => {
+            if (todo.id == active.id) {
+              return {
+                ...todo,
+                status: overContainer
+              }
+            }
+            return todo
+          })
+          setTodos(newTodo)
           setActiveId(null);
         }}
         cancelDrop={cancelDrop}
@@ -222,10 +234,11 @@ export function MultipleContainers({
                   id={containerId}
                   columns={columns}
                   items={statusItems[containerId]}
+                  title={containerId}
                 >
                   {statusItems[containerId].map((value, index) =>
                     <SortableItem key={value} id={value}>
-                      <CardTodo todo={flattenTodos.filter((todo) => todo.id == value)[0]} />
+                      <CardTodo todo={todos.filter((todo) => todo.id == value)[0]} />
                     </SortableItem>
                   )
                   }
@@ -237,7 +250,7 @@ export function MultipleContainers({
           <DragOverlay dropAnimation={dropAnimation} adjustScale={false}>
             {activeId ?
               <Box id={activeId}>
-                <CardTodo todo={flattenTodos.filter((todo) => todo.id == activeId)[0]} />
+                <CardTodo todo={todos.filter((todo) => todo.id == activeId)[0]} />
               </Box>
               : null}
           </DragOverlay>,

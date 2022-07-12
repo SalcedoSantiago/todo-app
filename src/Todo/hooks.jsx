@@ -9,7 +9,6 @@ export function useTodos() {
             todos,
             isOpen,
             status,
-            flattenTodos,
             filterStatus,
             statusItems,
         },
@@ -26,17 +25,16 @@ export function useTodos() {
 
 
     return {
+        setTodos,
         todos,
         filterStatus,
         status,
         addTodo,
-        flattenTodos,
         isOpen,
         toggleModal,
         deleteTodo,
         updateTodo,
         reOrderTodos,
-        filterStatus,
         setStatusItems,
         statusItems,
     }

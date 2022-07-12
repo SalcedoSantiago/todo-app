@@ -73,7 +73,6 @@ function TodoProvider({ children }) {
     const [isOpen, toggleModal] = useState();
     const [todos, setTodos] = useState(initialState);
     const [status, setStatus] = useState(STATUS);
-    const flattenTodos = flatten(Object.values(todos));
 
     const filterStatus = [...STATUS.sort((a, b) => a.order - b.order)].reduce((obj, { name }) => {
         return {
@@ -83,9 +82,6 @@ function TodoProvider({ children }) {
     }, {})
 
     const [statusItems, setStatusItems] = useState(filterStatus);
-
-
-    console.log('statusItems', statusItems);
 
     const addTodo = (todo, currStatus) => {
         const id = uniqueId();
@@ -110,7 +106,7 @@ function TodoProvider({ children }) {
 
     const updateTodo = (currentTodo) => {
         const { id, status } = currentTodo;
-        const prevTodo = flattenTodos.filter((todo) => todo.id == id)[0];
+        const prevTodo = todos.filter((todo) => todo.id == id)[0];
 
         if (currentTodo.status != prevTodo.status) {
             setStatusItems(prev => {
@@ -163,7 +159,6 @@ function TodoProvider({ children }) {
         state: {
             todos,
             isOpen,
-            flattenTodos,
             status,
             filterStatus,
             statusItems
@@ -174,6 +169,7 @@ function TodoProvider({ children }) {
             deleteTodo,
             updateTodo,
             reOrderTodos,
+            setTodos,
             setStatusItems
         }
     }

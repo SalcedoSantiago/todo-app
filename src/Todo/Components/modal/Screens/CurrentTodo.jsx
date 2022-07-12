@@ -16,9 +16,9 @@ import { map } from 'lodash';
 import DueDate from '../components/DueDate';
 
 const CurrentTodo = ({ isOpen, toggleModal, id }) => {
-    const { updateTodo, status, flattenTodos } = useTodos();
+    const { updateTodo, status, todos } = useTodos();
     const ref = useRef()
-    const currTodo = flattenTodos.filter((todo) => todo.id == id)[0];
+    const currTodo = todos.filter((todo) => todo.id == id)[0];
     const [currentTodo, setCurrentTodo] = useState(currTodo);
 
 

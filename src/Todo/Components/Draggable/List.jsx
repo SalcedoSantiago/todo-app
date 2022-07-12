@@ -1,16 +1,21 @@
 import React from "react";
 import { Stack } from "@chakra-ui/react";
 
-const List = ({ children, forwarRef }) => {
+import HeaderList from "../HeaderList";
+
+
+const List = ({ children, forwarRef, title, count }) => {
   return (
-    <ul ref={forwarRef} className={"rounded bg-gray-200 p-2"}>
-      <div className="flex justify-between py-1">
-        <h3 className="text-sm ">Completed</h3>
-      </div>
+    <Stack direction={'column'} ref={forwarRef} className={"rounded bg-gray-200 p-2"} pt={5} minH={'60vh'}>
+      <HeaderList
+        title={title}
+        count={count}
+      />
+      {/* </div> */}
       <Stack direction={'column'} w="250px">
         {children}
       </Stack>
-    </ul>
+    </Stack>
   );
 }
 

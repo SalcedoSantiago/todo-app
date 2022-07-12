@@ -1,18 +1,15 @@
 import React, { useRef, useState } from 'react'
-import { Stack, Box, Text } from '@chakra-ui/react'
-import CardActions from './cardActions';
-import ModalCurrent from '../Components/modal/Screens/CurrentTodo';
+import { Stack, Box, Text, Badge, Heading, Avatar } from '@chakra-ui/react'
+import { EmailIcon } from '@chakra-ui/icons';
+
 
 const Card = ({ todo }) => {
-    const [openModal, setOpenModal] = useState(false)
-    const [currentTodo, setCurrentTodo] = useState({});
     const optionRef = useRef();
-
 
     return (
         <Box
             position="relative"
-            px={3}
+            px={5}
             py={4}
             mb={4}
             borderRadius={'md'}
@@ -27,29 +24,34 @@ const Card = ({ todo }) => {
                 setCurrentTodo(todo);
                 setOpenModal(true)
             }}
-        // maxHeight="100px"
         >
-            <Stack pb={2} direction={'row'} justifyContent={'space-between'} alignItems="center">
-                <Text
-                    px={2}
-                    fontWeight={600}
+            <Stack pb={2} direction={'column'} alignItems="start">
+                <Badge  rounded="4" colorScheme='red'>
+                    urgent
+                </Badge>
+                <Heading
+                    fontWeight={500}
+                    fontSize={'lg'}
                 >
                     {todo?.title ? todo.title : 'Uname'}
-                </Text>
-                <Box>
-                    <CardActions
-                        forwardRef={optionRef}
-                        todo={todo}
-                        setCurrentTodo={setCurrentTodo}
-                        setOpenModal={setOpenModal}
-                    />
-                </Box>
+                </Heading>
             </Stack>
-            <Box px={2} >
-                <Text>
-                    {todo?.description ? todo.description : ''}
-                </Text>
-            </Box>
+            <Stack direction={'row'} pt={4} alignItems={'center'}  justifyContent="space-between">
+                <Stack direction={'row'} alignItems='center'>
+                    <Avatar
+                        size='xs'
+                        src='https://bit.ly/sage-adebayo'
+                    />
+                    <Text
+                        fontSize='xs'
+                    >13-15 Jul</Text>
+                </Stack>
+
+                <Stack direction={'row'} alignItems='center'>
+                    <EmailIcon />
+                    <Text>2</Text>
+                </Stack>
+            </Stack>
         </Box>
     )
 }
