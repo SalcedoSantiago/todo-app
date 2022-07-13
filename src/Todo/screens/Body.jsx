@@ -42,13 +42,14 @@ const Body = () => {
             <Stack
                 overflow={'hidden'}
                 w={'full'}
+                h={'full'}
             >
                 <MultipleContainers />
             </Stack>
 
-            <Button onClick={() => { addStatus() }}>
+            {/* <Button onClick={() => { addStatus() }}>
                 + add new row
-            </Button>
+            </Button> */}
             <NewTodo type={typeTodo} />
         </Box>
     )

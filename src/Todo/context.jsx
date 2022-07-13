@@ -86,9 +86,7 @@ function TodoProvider({ children }) {
 
 
     useEffect(() => {
-        console.log('test');
         if (status?.length > STATUS?.length) {
-            console.log('status', status);
             setStatusItems({
                 ...statusItems,
                 [status[status.length - 1]?.name]: []
@@ -96,7 +94,6 @@ function TodoProvider({ children }) {
         }
     }, [status])
 
-    console.log('statusItems', statusItems);
 
     const addStatus = () => {
         const id = uniqueId();

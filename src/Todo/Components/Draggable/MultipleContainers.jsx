@@ -25,6 +25,7 @@ import CardTodo from '../Card';
 import CurrentTodo from "../modal/Screens/CurrentTodo";
 import { Item, SortableItem } from "./Item";
 import List from "./List";
+import AddNewStatus from "./AddNewStatus";
 
 
 
@@ -222,7 +223,7 @@ export function MultipleContainers({
         onDragCancel={onDragCancel}
         modifiers={modifiers}
       >
-        <Stack direction="row" overflowX={'scroll'}>
+        <Stack direction="row" h={'80vh'} overflowX={'scroll'}>
           {Object.keys(statusItems)
             .filter((key) => key !== VOID_ID)
             .map((containerId) => (
@@ -246,6 +247,7 @@ export function MultipleContainers({
                 </DroppableContainer>
               </SortableContext>
             ))}
+          <AddNewStatus />
         </Stack>
         {createPortal(
           <DragOverlay dropAnimation={dropAnimation} adjustScale={false}>
