@@ -19,6 +19,8 @@ export function useTodos() {
             setStatusItems,
             setTodos,
             addStatus,
+            deleteStatus,
+            statusToLeft
         }
     } = useContext(TodoContext);
 
@@ -35,5 +37,7 @@ export function useTodos() {
         updateTodo,
         setStatusItems,
         statusItems,
+        deleteStatus,
+        statusToLeft,
     }
 }

@@ -5,7 +5,7 @@ import { BsThreeDotsVertical } from 'react-icons/bs';
 
 const Layout = ({ children }) => {
     return (
-        <Container h={'100vh'} maxW={'6xl'} py={20}>
+        <Container h={'100vh'} maxW={'6xl'} py={20} >
             {children}
         </Container>
     )

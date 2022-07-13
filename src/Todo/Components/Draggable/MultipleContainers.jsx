@@ -223,7 +223,7 @@ export function MultipleContainers({
         onDragCancel={onDragCancel}
         modifiers={modifiers}
       >
-        <Stack direction="row" h={'80vh'} overflowX={'scroll'}>
+        <Stack direction="row" h={'78vh'} spacing={6} overflow={'scroll'}>
           {Object.keys(statusItems)
             .filter((key) => key !== VOID_ID)
             .map((containerId) => (
@@ -231,6 +231,7 @@ export function MultipleContainers({
                 key={containerId}
                 items={statusItems[containerId]}
                 strategy={strategy}
+                style={{ height: '250px' }}
               >
                 <DroppableContainer
                   id={containerId}

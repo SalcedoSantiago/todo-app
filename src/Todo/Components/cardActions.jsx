@@ -15,39 +15,33 @@ import { BsThreeDotsVertical, BsChatSquareQuote, BsFillTrashFill } from 'react-i
 import { RiFileShredLine } from 'react-icons/ri';
 import { useTodos } from '../hooks';
 
-const CardActions = ({ forwardRef, todo, setCurrentTodo, setOpenModal }) => {
-    const { isOpen, onToggle, onClose } = useDisclosure();
-    const { deleteTodo, addTodo } = useTodos();
+const CardActions = ({ name }) => {
+
+    const { deleteStatus, statusToLeft } = useTodos();
 
     const handleDelete = () => {
-        deleteTodo(todo);
-        onClose(!isOpen)
+        deleteStatus(name);
     }
 
-    const handleEdit = (e) => {
-        e.preventDefault();
-        setCurrentTodo(todo);
-        setOpenModal(true);
-        onClose(!isOpen)
+    const moveToLeft = () => {
+        statusToLeft(name);
     }
 
-
-    const handleDuplicate = (e) => {
-        e.preventDefault();
-        addTodo(todo);
-        onClose(!isOpen)
-    }
 
     return (
-        <Flex justifyContent="center" ref={forwardRef} color="black">
-            <Popover placement="bottom" isLazy>
+        <Flex justifyContent="center" color="black">
+            <Popover placement="top" isLazy>
                 <PopoverTrigger>
                     <IconButton
                         aria-label="More server options"
-                        icon={<BsThreeDotsVertical />}
-                        variant="solid"
-                        w="fit-content"
+                        icon={<BsThreeDotsVertical
+                        />}
+                        size='xsm'
+                        fontSize="sm"
+                        variant="green"
+                    // w="fit-content"
                     />
+                    {/* <BsThreeDotsVertical /> */}
                 </PopoverTrigger>
                 <PopoverContent w="fit-content" _focus={{ boxShadow: 'none' }}>
                     <PopoverArrow />
@@ -60,21 +54,35 @@ const CardActions = ({ forwardRef, todo, setCurrentTodo, setOpenModal }) => {
                                 justifyContent="space-between"
                                 fontWeight="normal"
                                 fontSize="sm"
-                                onClick={handleEdit}
+                            // onClick={handleEdit}
                             >
                                 Edit
                             </Button>
-                            <Button
-                                w="194px"
-                                variant="ghost"
-                                rightIcon={<RiFileShredLine />}
-                                justifyContent="space-between"
-                                fontWeight="normal"
-                                fontSize="sm"
-                                onClick={handleDuplicate}
-                            >
-                                Duplicate
-                            </Button>
+
+                            <Stack direction={'row'} alignItems="row">
+                                <Button
+                                    w="50%"
+                                    variant="ghost"
+                                    rightIcon={<RiFileShredLine />}
+                                    justifyContent="space-between"
+                                    fontWeight="normal"
+                                    fontSize="sm"
+                                    onClick={moveToLeft}
+                                >
+                                    Left
+                                </Button>
+                                <Button
+                                    w="50%"
+                                    variant="ghost"
+                                    rightIcon={<RiFileShredLine />}
+                                    justifyContent="space-between"
+                                    fontWeight="normal"
+                                    fontSize="sm"
+                                // onClick={handleDuplicate}
+                                >
+                                    Right
+                                </Button>
+                            </Stack>
                             <Button
                                 w="194px"
                                 variant="ghost"

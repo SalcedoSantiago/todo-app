@@ -20,7 +20,7 @@ const Body = () => {
     const [typeTodo, setTypeTodo] = useState('todo');
 
     return (
-        <Box h={'100%'} py={4}>
+        <Box h={'100%'} py={4} >
             <Stack direction={'row'} justifyContent="space-between" maxW={'800px'}>
                 <Box>
                     <Heading pb={3}>Daily Task</Heading>
@@ -40,9 +40,6 @@ const Body = () => {
                 </Box>
             </Stack>
             <Stack
-                overflow={'hidden'}
-                w={'full'}
-                h={'full'}
             >
                 <MultipleContainers />
             </Stack>

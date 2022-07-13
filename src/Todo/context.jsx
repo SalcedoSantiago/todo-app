@@ -95,17 +95,49 @@ function TodoProvider({ children }) {
     }, [status])
 
 
-    const addStatus = () => {
+    const addStatus = (name) => {
         const id = uniqueId();
         setStatus([
             ...status,
             {
-                name: 'a' + id,
+                name: name,
                 order: status.length + 1
             }
         ])
 
     }
+
+    const statusToLeft = (statusName) => {
+        // const actualOrder = status.findIndex(({ name }) => name === statusName);
+        // const element = status[actualOrder - 1];
+        // const currrElemnt = status[actualOrder];
+        // let newStatus = status;
+        // newStatus[actualOrder - 1] = currrElemnt;
+        // newStatus[actualOrder] = element;
+
+        // const newStatusWithinMove = status.splice(actualOrder - 1, 1);
+        // // console.log('actualOrder', actualOrder);
+        // const fromIndex = actualOrder;
+        // const toIndex = actualOrder - 1;
+        // const element = status.splice(fromIndex, 1)[0];
+        // console.log('element',element);
+        // const test = status.splice(toIndex, 0, element);
+        // console.log('test', test);
+        // this.splice(to,0,this.splice(from,1)[0]);
+    }
+
+
+    const deleteStatus = (name) => {
+        if (!name) {
+            return;
+        }
+
+        setTodos((prev) => prev.filter(({ status }) => status != name))
+        let newStatusItems = { ...statusItems };
+        delete newStatusItems[name];
+        setStatusItems(newStatusItems);
+    }
+
 
     const addTodo = (todo) => {
         const id = uniqueId();
@@ -128,6 +160,7 @@ function TodoProvider({ children }) {
             }
         })
     }
+
 
     const updateTodo = (currentTodo) => {
         const { id, status } = currentTodo;
@@ -183,7 +216,9 @@ function TodoProvider({ children }) {
             updateTodo,
             setTodos,
             addStatus,
-            setStatusItems
+            setStatusItems,
+            deleteStatus,
+            statusToLeft,
         }
     }
 
@@ -198,7 +233,7 @@ function TodoProvider({ children }) {
     return (
         <TodoContext.Provider value={value}>
             {children}
-        </TodoContext.Provider>
+        </ TodoContext.Provider>
     );
 }
 

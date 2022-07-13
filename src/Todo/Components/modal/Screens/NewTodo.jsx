@@ -22,7 +22,7 @@ import Assign from '../components/Assign';
 const NewTodo = () => {
     const { addTodo, toggleModal, isOpen } = useTodos();
     const todoDefault = {
-        title: '',
+        title: 'TITLE EXAMPLE',
         status: 'todo',
         color: '#fff',
         description: '',

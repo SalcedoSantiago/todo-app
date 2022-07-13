@@ -31,7 +31,7 @@ export function SortableItem({ id, children }) {
   };
 
   return (
-    <Box ref={setNodeRef} style={style} {...attributes} {...listeners}>
+    <Box ref={setNodeRef} style={style} {...attributes} {...listeners} minH="100px">
       <Item>{children}</Item>
     </Box>
   );

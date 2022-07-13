@@ -12,7 +12,7 @@ const List = ({ children, forwarRef, title, count }) => {
         count={count}
       />
       {/* </div> */}
-      <Stack direction={'column'} w="250px">
+      <Stack direction={'column'} w="250px" h={'100%'}>
         {children}
       </Stack>
     </Stack>
