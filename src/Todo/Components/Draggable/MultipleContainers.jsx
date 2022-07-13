@@ -222,7 +222,7 @@ export function MultipleContainers({
         onDragCancel={onDragCancel}
         modifiers={modifiers}
       >
-        <Stack direction="row">
+        <Stack direction="row" overflowX={'scroll'}>
           {Object.keys(statusItems)
             .filter((key) => key !== VOID_ID)
             .map((containerId) => (

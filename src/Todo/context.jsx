@@ -1,5 +1,7 @@
 import { flatten, map, isEqual, uniqueId } from "lodash";
 import { createContext, useMemo, useState, useEffect } from "react";
+import { useSelectorValue } from 'use-selector';
+
 
 const TodoContext = createContext({});
 
@@ -73,30 +75,39 @@ function TodoProvider({ children }) {
     const [isOpen, toggleModal] = useState();
     const [todos, setTodos] = useState(initialState);
     const [status, setStatus] = useState(STATUS);
-    const [orderStatus, setOrderStatus] = useState(['todo', 'doing', 'done'])
-    const [statusItems, setStatusItems] = useState(orderStatus.reduce((acc, name) => (
+    const orderStatus = status.reduce((acc, { name }) => (
         {
             ...acc,
             [name]: todos.filter(({ status }) => status == name).map(({ id }) => id),
         }
-    ), {}));
+    ), {})
 
+    const [statusItems, setStatusItems] = useState(orderStatus);
+
+
+    useEffect(() => {
+        console.log('test');
+        if (status?.length > STATUS?.length) {
+            console.log('status', status);
+            setStatusItems({
+                ...statusItems,
+                [status[status.length - 1]?.name]: []
+            })
+        }
+    }, [status])
+
+    console.log('statusItems', statusItems);
 
     const addStatus = () => {
         const id = uniqueId();
-        // const 
-        // setOrderStatus((prev) => (['todo', 'doing', 'done', id]))
-        setStatus((prev) => ([
-            ...prev,
+        setStatus([
+            ...status,
             {
-                name: id,
-                order: prev.length + 1
+                name: 'a' + id,
+                order: status.length + 1
             }
-        ]))
-        // setStatusItems((prev) => ({
-        //     ...prev,
-        //     [id]: []
-        // }))
+        ])
+
     }
 
     const addTodo = (todo) => {
@@ -166,7 +177,7 @@ function TodoProvider({ children }) {
             todos,
             isOpen,
             status,
-            statusItems
+            statusItems,
         },
         actions: {
             addTodo,

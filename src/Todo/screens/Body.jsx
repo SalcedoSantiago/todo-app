@@ -42,7 +42,6 @@ const Body = () => {
             <Stack
                 overflow={'hidden'}
                 w={'full'}
-
             >
                 <MultipleContainers />
             </Stack>
