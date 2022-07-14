@@ -25,6 +25,7 @@
     "react-dom": "^18.0.0",
     "react-icons": "^4.4.0",
     "react-sortablejs": "^6.1.4",
+    "react-tag-input": "^6.8.0",
     "sortablejs": "^1.15.0",
     "use-selector": "^3.0.1"
   },

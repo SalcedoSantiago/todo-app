@@ -18,6 +18,7 @@ import Label from '../components/Label';
 import TodoText from '../components/TodoText';
 import ColorPicker from '../components/ColorPicker';
 import Assign from '../components/Assign';
+import Task from '../components/Task';
 
 const NewTodo = () => {
     const { addTodo, toggleModal, isOpen } = useTodos();
@@ -50,32 +51,24 @@ const NewTodo = () => {
                 value={currentTodo.title}
                 onChange={handleUpdate}
             />
-            <Box>
-                <Box>
-                    <StatusPicker
-                        value={currentTodo.status}
-                        onChange={({ target: { value } }) => { handleUpdate(value, 'status') }}
-                    />
-                    <DueDate
-                        date={currentTodo.date}
-                    />
-                    <Assign />
-                    <Label />
-                    <Divider py={2}
-                        colorScheme="gray"
-                    />
-                    <TodoText
-                        title={'Todo'}
-                        value={currentTodo.description}
-                        onChange={({ target: { value } }) => { handleUpdate(value, 'description') }}
-                    />
-                    <Divider py={2} colorScheme="gray" />
-                    <TodoText
-                        title={'Activity'}
-                        value={currentTodo?.activity ? currentTodo.activity : ''}
-                        onChange={({ target: { value } }) => { handleUpdate(value, 'activity') }}
-                    />
-                </Box>
+            <Box py={6}>
+                <StatusPicker
+                    value={currentTodo.status}
+                    onChange={({ target: { value } }) => { handleUpdate(value, 'status') }}
+                />
+                <DueDate
+                    date={currentTodo.date}
+                />
+                <Divider py={2}
+                    colorScheme="gray"
+                />
+                <TodoText
+                    title={'Todo'}
+                    value={currentTodo.description}
+                    onChange={({ target: { value } }) => { handleUpdate(value, 'description') }}
+                />
+                <Divider py={2} colorScheme="gray" />
+                <Task />
             </Box>
             <ColorPicker
                 value={currentTodo.color}
