@@ -47,7 +47,6 @@ function TodoProvider({ children }) {
 
     const [statusItems, setStatusItems] = useState(orderStatus);
 
-
     useEffect(() => {
         const initTodos = JSON.parse(localStorage.getItem('todos'))
         if (Boolean(initTodos?.length)) {
@@ -70,7 +69,6 @@ function TodoProvider({ children }) {
             setStatusItems(order)
         }
     }, [])
-
 
 
     const addTodo = (todo) => {

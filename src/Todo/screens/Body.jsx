@@ -9,14 +9,12 @@ import { Stack, Box, Heading, Text, Button, Container, Grid, GridItem } from '@c
 /**
  * Internal dependencies
  */
-import ListTodos from '../Components/List';
 import { useTodos } from '../hooks';
 import NewTodo from '../Components/modal/Screens/NewTodo';
-import Card from '../Components/Card';
 import { MultipleContainers } from "../Components/Draggable/MultipleContainers";
 
 const Body = () => {
-    const { todos, toggleModal, status, addStatus } = useTodos();
+    const { toggleModal } = useTodos();
     const [typeTodo, setTypeTodo] = useState('todo');
 
     return (

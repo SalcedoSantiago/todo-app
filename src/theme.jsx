@@ -12,7 +12,7 @@ export default extendTheme({
     styles: {
         global: {
             body: {
-                backgroundColor: '#f2f2f2'
+                backgroundColor: 'blue.50'
             }
         }
     }

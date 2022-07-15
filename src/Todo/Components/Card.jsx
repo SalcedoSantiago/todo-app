@@ -33,7 +33,7 @@ const Card = ({ todo }) => {
             mb={4}
             borderRadius={'md'}
             cursor={'pointer'}
-            shadow="sm"
+            shadow="md"
             bgColor={todo?.color ? todo.color : 'white'}
             color={todo?.color && todo.color == '#fff' ? '#000' : '#fff' || '#000'}
             onClick={(e) => {

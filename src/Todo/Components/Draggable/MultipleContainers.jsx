@@ -214,8 +214,12 @@ export function MultipleContainers({
               }
             }
             return todo
-          })
+          });
+
+
+          console.log('newTodo', newTodo);
           setTodos(newTodo)
+          localStorage.setItem('todos', JSON.stringify(newTodo));
           setActiveId(null);
         }}
         cancelDrop={cancelDrop}
