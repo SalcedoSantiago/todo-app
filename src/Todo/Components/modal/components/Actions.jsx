@@ -5,8 +5,8 @@ import { Box, Text, Divider, Stack, Input, Select, Button } from '@chakra-ui/rea
 const Actions = ({ onCancel = noop, onSave = noop }) => {
     return (
         <Stack direction="row" justifyContent={'end'} mt={6}>
-            <Button colorScheme='blue' mr={3} onClick={onCancel}>
-                Close
+            <Button colorScheme='red' mr={1} onClick={onCancel}>
+                Cancel
             </Button>
             <Button colorScheme={'green'} onClick={onSave}>
                 Save

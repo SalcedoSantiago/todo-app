@@ -11,8 +11,8 @@ const HeaderList = ({ title = '', count = 0 }) => {
 
 
     return (
-        <Stack w="250px" direction={'row'} bgColor={'green.200'} justifyContent="space-between" alignItems="center" borderRadius={3} py={3} px={3}>
-            <Text fontWeight={600} textTransform={'capitalize'}>{title}</Text>
+        <Stack w="100%" direction={'row'} bgColor={'blue.400'} justifyContent="space-between" alignItems="center" borderRadius={3} py={3} px={3}>
+            <Text color={'white'} fontWeight={600} textTransform={'capitalize'}>{title}</Text>
             {!isDefault &&
                 <CardActions name={title} />
             }

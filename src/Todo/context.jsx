@@ -1,7 +1,5 @@
-import { flatten, map, isEqual, uniqueId } from "lodash";
-import { createContext, useMemo, useState, useEffect } from "react";
-import { useSelectorValue } from 'use-selector';
-
+import { createContext, useState, useEffect } from "react";
+import { uniqueId } from "lodash";
 
 const TodoContext = createContext({});
 
@@ -23,57 +21,22 @@ const STATUS = [
 
 const initialState = [
     {
-        title: 'Hacer deporte',
+        title: 'Todo initial',
         description: 'lorem ipsum',
         status: 'todo',
         labels: ['work'],
         color: '#fff',
         id: "543",
+        priority: 'mid',
         order: 0,
     },
-    {
-        title: 'Estudiar',
-        description: 'lorem ipsum',
-        status: 'doing',
-        labels: ['work'],
-        color: '#fff',
-        id: "613",
-        order: 0,
-    },
-    {
-        title: 'Comer',
-        description: 'lorem ipsum',
-        status: 'done',
-        labels: ['work'],
-        color: '#fff',
-        id: "13",
-        order: 0,
-    },
-    {
-        title: 'Trabajar',
-        description: 'lorem ipsum',
-        status: 'done',
-        labels: ['work'],
-        color: '#fff',
-        id: "1543",
-        order: 1
-    },
-    {
-        title: 'Dormir',
-        description: 'lorem ipsum',
-        status: 'done',
-        labels: ['work'],
-        color: '#fff',
-        id: "35",
-        order: 2
-    }
 ]
 
 
 
 function TodoProvider({ children }) {
     const [isOpen, toggleModal] = useState();
-    const [todos, setTodos] = useState(initialState);
+    const [todos, setTodos] = useState([]);
     const [status, setStatus] = useState(STATUS);
     const orderStatus = status.reduce((acc, { name }) => (
         {
@@ -85,16 +48,42 @@ function TodoProvider({ children }) {
     const [statusItems, setStatusItems] = useState(orderStatus);
 
 
+    useEffect(() => {
+        const initTodos = JSON.parse(localStorage.getItem('todos'))
+        if (Boolean(initTodos?.length)) {
+            const order = status.reduce((acc, { name }) => (
+                {
+                    ...acc,
+                    [name]: initTodos.filter(({ status }) => status == name).map(({ id }) => id),
+                }
+            ), {});
+            setTodos(initTodos)
+            setStatusItems(order)
+        } else {
+            const order = status.reduce((acc, { name }) => (
+                {
+                    ...acc,
+                    [name]: initialState.filter(({ status }) => status == name).map(({ id }) => id),
+                }
+            ), {});
+            setTodos(initialState)
+            setStatusItems(order)
+        }
+    }, [])
+
+
+
     const addTodo = (todo) => {
         const id = uniqueId();
         const { status } = todo;
-        setTodos([
-            ...todos,
-            {
+
+        const TODOS = [
+            ...todos, {
                 ...todo,
                 id: id
             }
-        ])
+        ]
+        setTodos(TODOS)
 
         setStatusItems((items) => {
             return {
@@ -105,6 +94,8 @@ function TodoProvider({ children }) {
                 ]
             }
         })
+
+        localStorage.setItem('todos', JSON.stringify(TODOS));
     }
 
     const updateTodo = (currentTodo) => {
@@ -124,17 +115,19 @@ function TodoProvider({ children }) {
             })
         }
 
-        setTodos((prev) => {
-            return prev.map((todo) => {
-                if (todo.id == id) {
-                    return {
-                        ...todo,
-                        ...currentTodo,
-                    }
+        const TODOS = todos.map((todo) => {
+            if (todo.id == id) {
+                return {
+                    ...todo,
+                    ...currentTodo,
                 }
-                return todo
-            })
+            }
+            return todo
         })
+
+        setTodos(TODOS)
+
+        localStorage.setItem('todos', JSON.stringify(TODOS));
     }
 
 
@@ -144,6 +137,7 @@ function TodoProvider({ children }) {
         }
         const newTodos = todos.filter((todo) => todo?.id != _todo?.id)
         setTodos(newTodos)
+        localStorage.setItem('todos', JSON.stringify(newTodos));
     }
 
 

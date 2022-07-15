@@ -5,17 +5,17 @@ const TodoText = (props) => {
 
 
     return (
-        <Box pt={6}>
-            <Text fontWeight={600} py={2}>{props.title}</Text>
-            <Textarea
-                {...props}
-                pt={3}
-                placeholder='Here is a sample placeholder'
-                size='sm'
-                border={'none'}
-            />
-        </Box>
-
+        <Textarea
+            {...props}
+            minH={'300px'}
+            maxH={'300px'}
+            pt={4}
+            px={4}
+            placeholder='Write todos here...'
+            size='md'
+            border={'none'}
+            bgColor="gray.100"
+        />
     )
 }
 

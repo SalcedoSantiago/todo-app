@@ -1,10 +1,29 @@
 import React, { useRef, useState } from 'react'
 import { Stack, Box, Text, Badge, Heading, Avatar } from '@chakra-ui/react'
 import { EmailIcon } from '@chakra-ui/icons';
-
+import {
+    BsCardChecklist
+} from "react-icons/bs";
 
 const Card = ({ todo }) => {
     const optionRef = useRef();
+
+    const getColorPriority = () => {
+        switch (todo.priority) {
+            case 'urgent':
+                return 'red'
+
+            case 'low':
+                return 'green'
+            case 'high':
+                return 'orange'
+            case 'mid':
+                return 'blue'
+            default:
+                return ''
+        }
+    }
+
 
     return (
         <Box
@@ -26,8 +45,8 @@ const Card = ({ todo }) => {
             }}
         >
             <Stack pb={2} direction={'column'} alignItems="start">
-                <Badge  rounded="4" colorScheme='red'>
-                    urgent
+                <Badge rounded="4" colorScheme={getColorPriority()}>
+                    {todo?.priority}
                 </Badge>
                 <Heading
                     fontWeight={500}
@@ -36,21 +55,19 @@ const Card = ({ todo }) => {
                     {todo?.title ? todo.title : 'Uname'}
                 </Heading>
             </Stack>
-            <Stack direction={'row'} pt={4} alignItems={'center'}  justifyContent="space-between">
-                <Stack direction={'row'} alignItems='center'>
-                    <Avatar
-                        size='xs'
-                        src='https://bit.ly/sage-adebayo'
-                    />
-                    <Text
-                        fontSize='xs'
-                    >13-15 Jul</Text>
-                </Stack>
+            <Stack>
+                <Text>{todo?.description || ''}</Text>
 
-                <Stack direction={'row'} alignItems='center'>
-                    <EmailIcon />
-                    <Text>2</Text>
-                </Stack>
+            </Stack>
+            <Stack direction={'row'} pt={4} alignItems={'center'} justifyContent="end">
+                {
+                    todo?.tasks && (
+                        <Stack direction={'row'} alignItems='center'>
+                            <BsCardChecklist />
+                            <Text>{todo.tasks.length}</Text>
+                        </Stack>
+                    )
+                }
             </Stack>
         </Box>
     )

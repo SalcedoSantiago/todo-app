@@ -22,7 +22,7 @@ const ListTodos = ({ todo }) => {
 
 
     return (
-        <Box width={'250px'} height={'100%'} >
+        <Box width={'100%'} height={'100%'} >
             <Stack direction={'column'} gap={4} h={'100%'} py={4}>
                 <HeaderList title={title} cant={Boolean(items?.length) ? items.length : 0} />
                 {/* <Stack direction={'column'} h={'100%'} >

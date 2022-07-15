@@ -222,7 +222,7 @@ export function MultipleContainers({
         onDragCancel={onDragCancel}
         modifiers={modifiers}
       >
-        <Stack direction="row" h={'78vh'} spacing={6} overflow={'scroll'}>
+        <Stack direction="row" spacing={6}>
           {Object.keys(statusItems)
             .filter((key) => key !== VOID_ID)
             .map((containerId) => (
@@ -260,7 +260,8 @@ export function MultipleContainers({
         )}
       </DndContext>
 
-      {openModal &&
+      {
+        openModal &&
         <CurrentTodo isOpen={openModal} toggleModal={setOpenModal} id={currentTodo} />
       }
     </>

@@ -2,7 +2,7 @@
  * External dependencies
  */
 import React, { useState } from 'react'
-import { Box, Text, Divider, Stack, Input, Select, Button } from '@chakra-ui/react';
+import { Box, Divider, Stack, } from '@chakra-ui/react';
 
 /**
  * Internal dependencies
@@ -10,20 +10,18 @@ import { Box, Text, Divider, Stack, Input, Select, Button } from '@chakra-ui/rea
 import ModalContainer from '../components/container';
 import { useTodos } from '../../../hooks';
 import { map } from 'lodash';
-import DueDate from '../components/DueDate';
-import Assign from '../components/Assign';
-import Label from '../components/Label';
 import TodoText from '../components/TodoText';
 import ColorPicker from '../components/ColorPicker';
 import HeadingTodo from '../components/HeadingTodo';
 import StatusPicker from '../components/StatusPicker';
 import Actions from '../components/Actions';
+import Task from '../components/Task';
+import EmergencyPicker from '../components/EmergencyPicker';
 
 const CurrentTodo = ({ isOpen, toggleModal, id }) => {
     const { updateTodo, status, todos } = useTodos();
     const currTodo = todos.filter((todo) => todo.id == id)[0];
     const [currentTodo, setCurrentTodo] = useState(currTodo);
-
 
     const handleOnSave = () => {
         updateTodo(currentTodo);
@@ -40,36 +38,41 @@ const CurrentTodo = ({ isOpen, toggleModal, id }) => {
     };
 
 
+
+
     return (
         <ModalContainer toggleModal={toggleModal} isOpen={isOpen} onSave={handleOnSave}  >
             <HeadingTodo
                 value={currentTodo.title}
                 onChange={handleUpdate}
             />
-            <Box>
+            <Divider colorScheme="gray" />
+
+            <Box py={6}>
                 <StatusPicker
                     value={currentTodo.status}
                     onChange={({ target: { value } }) => { handleUpdate(value, 'status') }}
                 />
-                <DueDate
-                    date={currentTodo.date}
+                <EmergencyPicker
+                    onChange={({ target: { value } }) => { handleUpdate(value, 'priority') }}
+                    value={currentTodo.priority}
                 />
-                <Assign />
-                <Label />
                 <Divider py={2}
                     colorScheme="gray"
                 />
-                <TodoText
-                    title={'Todo'}
-                    value={currentTodo.description}
-                    onChange={({ target: { value } }) => { handleUpdate(value, 'description') }}
-                />
-                <Divider py={2} colorScheme="gray" />
-                <TodoText
-                    title={'Activity'}
-                    value={currentTodo?.activity ? currentTodo.activity : ''}
-                    onChange={({ target: { value } }) => { handleUpdate(value, 'activity') }}
-                />
+                <Box pt={6}>
+                    {currentTodo?.type == 'list' ?
+                        <Task
+                            value={currentTodo.tasks}
+                            setCurrentTodo={setCurrentTodo}
+                        /> :
+                        <TodoText
+                            value={currentTodo.description}
+                            onChange={({ target: { value } }) => { handleUpdate(value, 'description') }}
+                        />
+                    }
+                    <Divider py={2} colorScheme="gray" />
+                </Box>
             </Box>
             <Stack direction="row" justifyContent={'end'} pt={10} alignItems='center'>
                 <ColorPicker

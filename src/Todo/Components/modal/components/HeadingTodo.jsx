@@ -26,8 +26,8 @@ const HeadingTodo = ({ onChange, value }) => {
                 />
             }
             {!isEdit ?
-                <Button onClick={() => { setIsEdit(prev => !prev) }}>
-                    <EditIcon />
+                <Button onClick={() => { setIsEdit(prev => !prev) }} colorScheme="blue" >
+                    <EditIcon color={'white'} />
                 </Button>
                 :
                 <Stack direction={'row'} alignItems={'center'}>
@@ -36,7 +36,7 @@ const HeadingTodo = ({ onChange, value }) => {
                             setIsEdit(prev => !prev);
                             setText(value);
                         }}
-                        colorScheme='red'>
+                    >
                         <CloseIcon />
                     </Button>
                     <Button
@@ -44,7 +44,6 @@ const HeadingTodo = ({ onChange, value }) => {
                             onChange(text, 'title')
                             setIsEdit(prev => !prev);
                         }}
-                        colorScheme="green"
                     >
                         <CheckIcon />
                     </Button>
