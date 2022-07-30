@@ -194,6 +194,10 @@ export function MultipleContainers({
             const activeIndex = statusItems[activeContainer].indexOf(active.id);
             const overIndex = statusItems[overContainer].indexOf(overId);
 
+
+            console.log('overIndex', overIndex);
+            console.log('activeIndex', activeIndex);
+            console.log('items[overContainer]', statusItems[overContainer]);
             if (activeIndex !== overIndex) {
               setStatusItems((items) => ({
                 ...items,
@@ -203,6 +207,12 @@ export function MultipleContainers({
                   overIndex
                 )
               }));
+
+
+
+
+
+
             }
           }
 

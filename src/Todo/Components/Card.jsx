@@ -1,9 +1,8 @@
 import React, { useRef, useState } from 'react'
-import { Stack, Box, Text, Badge, Heading, Avatar } from '@chakra-ui/react'
-import { EmailIcon } from '@chakra-ui/icons';
-import {
-    BsCardChecklist
-} from "react-icons/bs";
+import { Stack, Box, Text, Badge, Heading, Avatar, Button } from '@chakra-ui/react'
+import { BsCardChecklist } from "react-icons/bs";
+import OutsideClickHandler from 'react-outside-click-handler';
+
 
 const Card = ({ todo }) => {
     const optionRef = useRef();
@@ -28,7 +27,7 @@ const Card = ({ todo }) => {
     return (
         <Box
             position="relative"
-            px={5}
+            px={6}
             py={4}
             mb={4}
             borderRadius={'md'}
@@ -69,6 +68,10 @@ const Card = ({ todo }) => {
                     )
                 }
             </Stack>
+
+            <Button position={'absolute'} top={0} right={0} mr={2} mt={2} onClick={() => { console.log('testing') }}>
+                <BsCardChecklist/>
+            </Button>
         </Box>
     )
 }

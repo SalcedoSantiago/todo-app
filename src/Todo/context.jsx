@@ -72,7 +72,7 @@ function TodoProvider({ children }) {
 
 
     const addTodo = (todo) => {
-        const id = uniqueId();
+        const id = Math.random().toString();
         const { status } = todo;
 
         const TODOS = [
